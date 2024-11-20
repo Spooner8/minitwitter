@@ -1,20 +1,30 @@
 import ollama from 'ollama';
-import { v4 as uuidv4 } from 'uuid';
-import type { Post } from '../../models/posts';
+import { postsTable } from '../../schemas/posts.ts';
+import { db } from '../database.ts';
+import { eq } from 'drizzle-orm';
 
 export const postService = {
+    getPosts,
     createPost,
     generatePost,
+    updatePost,
+    deletePost,
 };
 
-async function createPost(content: string): Promise<Post> {
-    const id = uuidv4();
-    const post: Post = { id, content };
-    return post;
+async function getPosts() {
+    return await db.select().from(postsTable);
+}
+
+async function createPost(content: string) {
+    const post: typeof postsTable.$inferInsert = {
+        content: content,
+    };
+
+    return await db.insert(postsTable).values(post).returning();
 }
 
 async function generatePost() {
-    const response = await ollama.chat({
+    const content = await ollama.chat({
         model: 'llama3.2:1b',
         messages: [
             {
@@ -25,10 +35,22 @@ async function generatePost() {
         ],
     });
 
-    const post: Post = {
-        id: uuidv4(),
-        content: response.message.content,
+    const post: typeof postsTable.$inferInsert = {
+        content: content.message.content,
     };
 
-    return post;
+    return await db.insert(postsTable).values(post).returning();
+}
+
+async function updatePost(id: number, content: string) {
+    return await db
+        .update(postsTable)
+        .set({
+            content: content,
+        })
+        .where(eq(postsTable.id, id));
+}
+
+async function deletePost(id: number) {
+    return await db.delete(postsTable).where(eq(postsTable.id, id));
 }

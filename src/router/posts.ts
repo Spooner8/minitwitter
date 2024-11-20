@@ -1,53 +1,76 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { postService } from '../services/crud/posts.ts';
-import type { Post } from '../models/posts.ts';
 
 const router = Router();
 
-let posts: Post[] = [];
-
-router.get('/api/posts', (_req: Request, res: Response) => {
-    res.status(200).json(posts);
+router.get('/api/posts', async (_req: Request, res: Response) => {
+    try {
+        const posts = await postService.getPosts();
+        if (!posts) {
+            res.status(404).send({ message: 'Posts not found' });
+        } else {
+            res.status(200).send(posts);
+        }
+    } catch (error: any) {
+        res.status(400).send({ message: error.message });
+    }
 });
 
 router.post('/api/posts', async (req: Request, res: Response) => {
     try {
         const { content } = req.body;
-        const post = await postService.createPost(content);
-        posts.push(post);
-        res.status(201).json(posts[posts.length - 1]);
+        const response = content && (await postService.createPost(content));
+        if (!response) {
+            res.status(404).send({ message: 'Post not created' });
+        } else {
+            res.status(201).send({ 'Post created': response });
+        }
     } catch (error: any) {
-        res.status(400).json({ message: error.message });
+        res.status(400).send({ message: error.message });
     }
 });
 
 router.post('/api/posts/generate', async (_req: Request, res: Response) => {
     try {
-        const post = await postService.generatePost();
-        posts.push(post);
-        res.status(201).json(posts[posts.length - 1]);
+        const response = await postService.generatePost();
+        if (!response) {
+            res.status(404).send({ message: 'Post not generated' });
+        } else {
+            res.status(201).send({ 'Post generated': response });
+        }
     } catch (error: any) {
-        res.status(400).json({ message: error.message });
+        res.status(400).send({ message: error.message });
     }
 });
 
-router.put('/api/posts/:id', (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { content } = req.body;
-    const existingPost = posts.find((post) => post.id === id);
-    if (!existingPost) {
-        res.status(404).json({ message: 'Post not found' });
-    } else {
-        existingPost.content = content;
-        res.status(200).json(posts[posts.length - 1]);
+router.put('/api/posts/:id', async (req: Request, res: Response) => {
+    try {
+        const id = parseInt(req.params.id);
+        const { content } = req.body;
+        const response = content && (await postService.updatePost(id, content));
+        if (!response) {
+            res.status(404).send({ message: 'Post not found' });
+        } else {
+            res.status(200).send({ 'Post updated': response });
+        }
+    } catch (error: any) {
+        res.status(400).send({ message: error.message });
     }
 });
 
-router.delete('/api/posts/:id', (req: Request, res: Response) => {
-    const { id } = req.params;
-    posts = posts.filter((post) => post.id !== id);
-    res.status(200).json(posts);
+router.delete('/api/posts/:id', async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const response = id && (await postService.deletePost(Number(id)));
+        if (!response) {
+            res.status(404).send({ message: 'Post not found' });
+        } else {
+            res.status(200).send({ 'Post deleted': response });
+        }
+    } catch (error: any) {
+        res.status(400).send({ message: error.message });
+    }
 });
 
 export default router;
