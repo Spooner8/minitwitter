@@ -1,6 +1,6 @@
 import ollama from 'ollama';
 import { v4 as uuidv4 } from 'uuid';
-import type { Post } from '../models/posts';
+import type { Post } from '../../models/posts';
 
 export const postService = {
     createPost,

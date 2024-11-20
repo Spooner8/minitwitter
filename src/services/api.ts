@@ -5,7 +5,7 @@ import 'dotenv/config';
 const PORT = process.env.APP_PORT || 3000;
 
 // Routers
-import postsRouter from '../routes/posts.ts';
+import postsRouter from '../router/posts.ts';
 
 export const initializeAPI = (app: Express) => {
     app.use(bodyParser.json());

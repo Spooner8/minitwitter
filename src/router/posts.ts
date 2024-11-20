@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
-import { postService } from '../services/posts.ts';
+import { postService } from '../services/crud/posts.ts';
 import type { Post } from '../models/posts.ts';
 
 const router = Router();
