@@ -13,6 +13,7 @@ router.get('/api/posts', async (_req: Request, res: Response) => {
             res.status(200).send(posts);
         }
     } catch (error: any) {
+        console.log(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -27,6 +28,7 @@ router.post('/api/posts', async (req: Request, res: Response) => {
             res.status(201).send({ 'Post created': response });
         }
     } catch (error: any) {
+        console.log(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -40,6 +42,7 @@ router.post('/api/posts/generate', async (_req: Request, res: Response) => {
             res.status(201).send({ 'Post generated': response });
         }
     } catch (error: any) {
+        console.log(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -55,6 +58,7 @@ router.put('/api/posts/:id', async (req: Request, res: Response) => {
             res.status(200).send({ 'Post updated': response });
         }
     } catch (error: any) {
+        console.log(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -69,6 +73,7 @@ router.delete('/api/posts/:id', async (req: Request, res: Response) => {
             res.status(200).send({ 'Post deleted': response });
         }
     } catch (error: any) {
+        console.log(error);
         res.status(400).send({ message: error.message });
     }
 });
