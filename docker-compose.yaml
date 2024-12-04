@@ -1,0 +1,18 @@
+services:
+    my-postgres:
+        image: postgres
+        ports:
+            - '5432:5432'
+        environment:
+            POSTGRES_USER: postres
+            POSTGRES_PASSWORD: supersecret123
+            POSTGRES_DB: minitwitter
+
+    minitwitter:
+        image: minitwitter
+        ports:
+            - '3000:3000'
+        environment:
+            DATABASE_URL: postgressql://postgres:supersecret123@my-postgres:5432/minitwitter
+        depends_on:
+            - my-postgres
