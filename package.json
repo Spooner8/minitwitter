@@ -24,6 +24,6 @@
     },
     "scripts": {
         "dev": "bun --watch ./src/app.ts",
-        "prod": "bun --watch ./src/app.ts"
+        "prod": "bun ./src/app.ts"
     }
 }
