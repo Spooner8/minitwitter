@@ -1,5 +1,6 @@
 services:
-    my-postgres:
+    db:
+        name: my-postgres
         image: postgres
         ports:
             - '5432:5432'
@@ -8,7 +9,8 @@ services:
             POSTGRES_PASSWORD: supersecret123
             POSTGRES_DB: minitwitter
 
-    minitwitter:
+    api:
+        name: minitwitter
         image: spoonersl/my-posts-api
         ports:
             - '3000:3000'
