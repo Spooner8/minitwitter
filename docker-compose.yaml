@@ -9,7 +9,7 @@ services:
             POSTGRES_DB: minitwitter
 
     minitwitter:
-        image: minitwitter
+        image: spoonersl/my-posts-api
         ports:
             - '3000:3000'
         environment:
