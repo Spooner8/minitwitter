@@ -23,7 +23,7 @@ router.post('/api/posts', async (req: Request, res: Response) => {
         const { content } = req.body;
         const response = content && (await postService.createPost(content));
         if (!response) {
-            res.status(404).send({ message: 'Post not created' });
+            res.status(401).send({ message: 'Post not created' });
         } else {
             res.status(201).send({ 'Post created': response });
         }
@@ -37,7 +37,7 @@ router.post('/api/posts/generate', async (_req: Request, res: Response) => {
     try {
         const response = await postService.generatePost();
         if (!response) {
-            res.status(404).send({ message: 'Post not generated' });
+            res.status(401).send({ message: 'Post not generated' });
         } else {
             res.status(201).send({ 'Post generated': response });
         }
