@@ -73,7 +73,7 @@ router.put('/api/posts/:id', isOwner, async (req: Request, res: Response) => {
     }
 });
 
-router.delete('/api/posts/:id', async (req: Request, res: Response) => {
+router.delete('/api/posts/:id', isOwner, async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const response = id && (await postService.deletePost(Number(id)));

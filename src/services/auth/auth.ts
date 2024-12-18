@@ -4,7 +4,6 @@ import type { Request, Response } from 'express';
 import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
-import type { User } from '../../schemas/user.ts';
 import jwt from 'jsonwebtoken';
 
 interface UserPayload {
@@ -49,7 +48,7 @@ async function verifyUser(username: string, password: string) {
     return isPasswordValid ? createJwtToken(user[0]) : null;
 }
 
-function createJwtToken(user: User) {
+function createJwtToken(user: UserPayload) {
     const payload = {
         id: user.id,
         username: user.username,
@@ -61,7 +60,7 @@ function createJwtToken(user: User) {
 
 async function getCurrentUser(req: Request) {
     const token = req.cookies?.jwt;
-    const payload = token && jwt.verify(token, JWT_SECRET) as UserPayload;
+    const payload = token && (jwt.verify(token, JWT_SECRET) as UserPayload);
 
     if (payload.id) {
         const user = userService.getUserById(payload.id);
