@@ -33,6 +33,8 @@ async function login(username: string, password: string, res: Response) {
     if (token) {
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         res.status(200).send({ message: 'User logged in' });
+    } else {
+        res.status(401).send({ message: 'Invalid credentials' });
     }
 }
 
@@ -58,18 +60,27 @@ function createJwtToken(user: UserPayload) {
     return jwt.sign(payload, JWT_SECRET, options);
 }
 
-async function getCurrentUser(req: Request) {
-    const token = req.cookies?.jwt;
-    const payload = token && (jwt.verify(token, JWT_SECRET) as UserPayload);
+async function getCurrentUser(req: Request, res: Response) {
+    try{
+        const token = req.cookies?.jwt;
+        if (!token) {
+            res.status(401).send({ message: 'Token not found' });
+        }
 
-    if (payload.id) {
-        const user = userService.getUserById(payload.id);
-        return user;
+        const payload = jwt.verify(token, JWT_SECRET) as UserPayload;
+        
+        if (payload.id) {
+            const user = await userService.getUserById(payload.id);
+            return user;
+        }
+    } catch (error: any) {
+        console.log(error);
+        res.status(400).send({ message: error.message });
     }
     return null;
 }
 
 function logout(res: Response) {
-    res.cookie('jwt', { httpOnly: true, maxAge: 1 });
+    res.cookie('jwt', '', { httpOnly: true, maxAge: 1 });
     res.status(200).send({ message: 'User logged out' });
 }

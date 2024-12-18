@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { userService } from '../services/crud/user.ts';
+import { isOwner } from '../middleware/auth.ts';
 
 const router = Router();
 
@@ -52,7 +53,7 @@ router.get('/api/user/:id', async (req: Request, res: Response) => {
     }
 });
 
-router.put('/api/user/:id', async (req: Request, res: Response) => {
+router.put('/api/user/:id', isOwner, async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
         const { username, password } = req.body;
@@ -71,7 +72,7 @@ router.put('/api/user/:id', async (req: Request, res: Response) => {
     }
 });
 
-router.delete('/api/user/:id', async (req: Request, res: Response) => {
+router.delete('/api/user/:id', isOwner, async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
         const response = id && (await userService.deleteUser(id));

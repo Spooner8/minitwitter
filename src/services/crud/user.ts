@@ -1,4 +1,4 @@
-import { usersTable } from '../../schemas/user.ts';
+import { usersTable } from '../../schemas';
 import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';

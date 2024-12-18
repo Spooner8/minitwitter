@@ -1,5 +1,5 @@
 import ollama from 'ollama';
-import { postsTable } from '../../schemas/posts.ts';
+import { postsTable } from '../../schemas';
 import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
 
