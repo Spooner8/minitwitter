@@ -7,11 +7,15 @@ export const isUser = async (
     res: Response,
     next: NextFunction
 ): Promise<void> => {
-    const user = await authService.getCurrentUser(req);
-    if (!user) {
-        res.status(401).json({ message: 'Unauthorized' });
-    } else {
-        next();
+    try {
+        const user = await authService.getCurrentUser(req, res);
+        if (!user) {
+            res.status(401).json({ message: 'Unauthorized' });
+        } else {
+            next();
+        }
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
     }
 };
 
@@ -20,13 +24,17 @@ export const isOwner = async (
     res: Response,
     next: NextFunction
 ): Promise<void> => {
-    const user = await authService.getCurrentUser(req);
-    const postId = parseInt(req.params.id);
+    try {
+        const user = await authService.getCurrentUser(req, res);
+        const postId = parseInt(req.params.id);
 
-    const post = await postService.getPostById(postId);
-    if (!user || !post || user.id !== post.userId) {
-        res.status(401).json({ message: 'Unauthorized' });
-    } else {
-        next();
+        const post = await postService.getPostById(postId);
+        if (!user || !post || user.id !== post.userId) {
+            res.status(401).json({ message: 'Unauthorized' });
+        } else {
+            next();
+        }
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
     }
-}
+};

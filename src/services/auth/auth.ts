@@ -51,7 +51,7 @@ async function verifyUser(username: string, password: string) {
 }
 
 function createJwtToken(user: UserPayload) {
-    const payload = {
+    const payload: UserPayload = {
         id: user.id,
         username: user.username,
     };
@@ -60,24 +60,25 @@ function createJwtToken(user: UserPayload) {
     return jwt.sign(payload, JWT_SECRET, options);
 }
 
-async function getCurrentUser(req: Request, res: Response) {
-    try{
+async function getCurrentUser(req: Request, res: Response): Promise<UserPayload | null> {
+    try {
         const token = req.cookies?.jwt;
         if (!token) {
-            res.status(401).send({ message: 'Token not found' });
+            return null;
         }
 
         const payload = jwt.verify(token, JWT_SECRET) as UserPayload;
-        
+
         if (payload.id) {
             const user = await userService.getUserById(payload.id);
-            return user;
+            return user ? user : null;
+        } else {
+            return null;
         }
     } catch (error: any) {
         console.log(error);
-        res.status(400).send({ message: error.message });
+        return null;
     }
-    return null;
 }
 
 function logout(res: Response) {

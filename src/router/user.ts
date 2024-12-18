@@ -24,7 +24,6 @@ router.post('/api/user/signup', async (req: Request, res: Response) => {
 });
 
 router.get('/api/user', async (_req: Request, res: Response) => {
-    console.log('Request angekommen');
     try {
         const users = await userService.getUsers();
         if (!users) {

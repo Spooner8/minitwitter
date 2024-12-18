@@ -19,15 +19,23 @@ async function createUser(username: string, password: string) {
         password: await bcrypt.hash(password, salt),
     };
 
-    return await db.insert(usersTable).values(user).returning();
+    return await db
+        .insert(usersTable)
+        .values(user)
+        .returning({ id: usersTable.id, username: usersTable.username });
 }
 
 async function getUsers() {
-    return await db.select().from(usersTable);
+    return await db.select({id: usersTable.id, username: usersTable.username}).from(usersTable);
 }
 
 async function getUserById(id: number) {
-    return (await db.select().from(usersTable).where(eq(usersTable.id, id)))[0];
+    return (
+        await db
+            .select({ id: usersTable.id, username: usersTable.username })
+            .from(usersTable)
+            .where(eq(usersTable.id, id))
+    )[0];
 }
 
 async function updateUser(id: number, username: string, password: string) {
