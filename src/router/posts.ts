@@ -1,10 +1,12 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { postService } from '../services/crud/posts.ts';
+import { isUser, isOwner } from '../middleware/auth.ts';
+import { authService } from '../services/auth/auth.ts';
 
 const router = Router();
 
-router.get('/api/posts', async (_req: Request, res: Response) => {
+router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
     try {
         const posts = await postService.getPosts();
         if (!posts) {
@@ -21,7 +23,13 @@ router.get('/api/posts', async (_req: Request, res: Response) => {
 router.post('/api/posts', async (req: Request, res: Response) => {
     try {
         const { content } = req.body;
-        const response = content && (await postService.createPost(content));
+        const user = await authService.getCurrentUser(req);
+        if (!user) {
+            res.status(401).send({ message: 'Unauthorized' });
+        }
+
+        const response = content && user?.id && (await postService.createPost(user.id, content));
+
         if (!response) {
             res.status(401).send({ message: 'Post not created' });
         } else {
@@ -33,9 +41,11 @@ router.post('/api/posts', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/api/posts/generate', async (_req: Request, res: Response) => {
+router.post('/api/posts/generate', async (req: Request, res: Response) => {
     try {
-        const response = await postService.generatePost();
+        const user = await authService.getCurrentUser(req);
+        const response = user?.id && await postService.generatePost(user.id);
+
         if (!response) {
             res.status(401).send({ message: 'Post not generated' });
         } else {
@@ -47,11 +57,11 @@ router.post('/api/posts/generate', async (_req: Request, res: Response) => {
     }
 });
 
-router.put('/api/posts/:id', async (req: Request, res: Response) => {
+router.put('/api/posts/:id', isOwner, async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
         const { content } = req.body;
-        const response = content && (await postService.updatePost(id, content));
+        const response = id && content && (await postService.updatePost(id, content));
         if (!response) {
             res.status(404).send({ message: 'Post not found' });
         } else {

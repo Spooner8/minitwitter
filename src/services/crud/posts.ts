@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 
 export const postService = {
     getPosts,
+    getPostById,
     createPost,
     generatePost,
     updatePost,
@@ -15,15 +16,20 @@ async function getPosts() {
     return await db.select().from(postsTable);
 }
 
-async function createPost(content: string) {
+async function getPostById(id: number) {
+    return (await db.select().from(postsTable).where(eq(postsTable.id, id)))[0];
+}
+
+async function createPost(userId: number, content: string) {
     const post: typeof postsTable.$inferInsert = {
+        userId: userId,
         content: content,
     };
 
     return await db.insert(postsTable).values(post).returning();
 }
 
-async function generatePost() {
+async function generatePost(userId: number) {
     const content = await ollama.chat({
         model: 'llama3.2:1b',
         messages: [
@@ -36,6 +42,7 @@ async function generatePost() {
     });
 
     const post: typeof postsTable.$inferInsert = {
+        userId: userId,
         content: content.message.content,
     };
 
