@@ -1,7 +1,11 @@
-import ollama from 'ollama';
+import { Ollama } from 'ollama';
 import { postsTable } from '../../schemas';
 import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
+import 'dotenv/config';
+
+const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+const ollama = new Ollama({ host: OLLAMA_BASE_URL });
 
 export const postService = {
     getPosts,
@@ -40,7 +44,6 @@ async function generatePost(userId: number) {
             },
         ],
     });
-
     const post: typeof postsTable.$inferInsert = {
         userId: userId,
         content: content.message.content,

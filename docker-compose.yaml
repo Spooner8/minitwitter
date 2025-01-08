@@ -1,3 +1,5 @@
+version: '3.8'
+
 name: minitwitter
 services:
     loadbalancer:
@@ -8,6 +10,8 @@ services:
         ports:
             - '80:80'
         restart: always
+        networks:
+            - minitwitter
     db:
         container_name: db
         image: postgres
@@ -18,7 +22,9 @@ services:
             POSTGRES_PASSWORD: supersecret123
             POSTGRES_DB: minitwitter
         volumes:
-            - ./docker-data/postgres:/var/lib/postgresql/data
+            - minitwitter-db:/var/lib/postgresql/data
+        networks:
+            - minitwitter
         restart: always
 
     api-1:
@@ -26,9 +32,12 @@ services:
         image: spoonersl/minitwitter
         environment:
             DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
+            OLLAMA_BASE_URL: http://ollama-1:11434
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
+        networks:
+            - minitwitter
         restart: always
 
     api-2:
@@ -36,7 +45,29 @@ services:
         image: spoonersl/minitwitter
         environment:
             DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
+            OLLAMA_BASE_URL: http://ollama-1:11434
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
+        networks:
+            - minitwitter
         restart: always
+
+    ollama-1:
+        container_name: ollama-1
+        image: ollama/ollama
+        ports:
+            - '11434:11434'            
+        volumes:
+            - minitwitter-ollama:/root/.ollama
+        networks:
+            - minitwitter
+        restart: always
+
+volumes:
+    minitwitter-db:
+    minitwitter-ollama:
+
+networks:
+    minitwitter:
+        driver: bridge
