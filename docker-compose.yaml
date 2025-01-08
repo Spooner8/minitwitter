@@ -32,7 +32,7 @@ services:
         image: spoonersl/minitwitter
         environment:
             DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
-            OLLAMA_BASE_URL: http://ollama
+            OLLAMA_BASE_URL: http://ollama-1:11434
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
@@ -45,7 +45,7 @@ services:
         image: spoonersl/minitwitter
         environment:
             DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
-            OLLAMA_BASE_URL: http://ollama
+            OLLAMA_BASE_URL: http://ollama-1:11434
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
