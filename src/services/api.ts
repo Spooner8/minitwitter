@@ -2,6 +2,7 @@ import { type Express } from 'express';
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const PORT = process.env.APP_PORT || 3000;
 
@@ -13,6 +14,7 @@ import userRouter from '../router/user.ts';
 export const initializeAPI = (app: Express) => {
     app.use(bodyParser.json());
     app.use(cookieParser());
+    app.use(cors());
 
     // Router
     app.use(postsRouter);
