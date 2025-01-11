@@ -4,7 +4,7 @@ import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
-const PORT = process.env.APP_PORT || 3000;
+const PORT = process.env.API_PORT || 3000;
 
 // Routers
 import postsRouter from '../router/posts.ts';

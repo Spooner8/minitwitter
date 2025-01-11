@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { postService } from '../services/crud/posts.ts';
 import { isUser, isOwner } from '../middleware/auth.ts';
 import { authService } from '../services/auth/auth.ts';
+import { detectHateSpeech } from '../middleware/detector.ts';
 
 const router = Router();
 
@@ -20,7 +21,7 @@ router.get('/api/posts', async (_req: Request, res: Response) => {
     }
 });
 
-router.post('/api/posts', async (req: Request, res: Response) => {
+router.post('/api/posts', detectHateSpeech, async (req: Request, res: Response) => {
     try {
         const { content } = req.body;
         const user = await authService.getCurrentUser(req, res);
