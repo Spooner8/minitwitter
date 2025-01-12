@@ -3,7 +3,16 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   ssr: false,
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxt/icon',
+    '@nuxtjs/google-fonts',
+  ],
+  googleFonts: {
+    families: {
+      Montserrat: true,
+    },
+  },
   devServer: {
     port: 4000,
   },
