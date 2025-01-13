@@ -28,10 +28,10 @@
         description: 'Login to your account'
     })
 
-    const username = ref('')
-    const password = ref('')
-    const confirmPassword = ref('')
-    const router = useRouter()
+    const username = ref('');
+    const password = ref('');
+    const confirmPassword = ref('');
+    const router = useRouter();
 
     const signup = async () => {
         if (password.value !== confirmPassword.value) {
@@ -43,14 +43,14 @@
             const response = await axios.post('/api/signup', {
                 username: username.value,
                 password: password.value
-            })
+            });
             if (response.data.success) {
-                router.push('/login')
+                router.push('/login');
             } else {
-                alert('Signup failed')
+                alert('Signup failed');
             }
         } catch (error) {
-            console.error('Signup error:', error)
+            console.error('Signup error:', error);
         }
     }
 </script>

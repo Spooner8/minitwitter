@@ -28,25 +28,25 @@
         layout: 'default',
         title: 'Login',
         description: 'Login to your account'
-    })
+    });
 
-    const username = ref('')
-    const password = ref('')
-    const router = useRouter()
+    const username = ref('');
+    const password = ref('');
+    const router = useRouter();
 
     const login = async () => {
         try {
             const response = await axios.post('/api/auth/login', {
                 username: username.value,
                 password: password.value
-            })
+            });
             if (response.status === 200) {
-                router.push('/')
+                router.push('/');
             } else {
-                alert('Login failed')
+                alert('Login failed');
             }
         } catch (error) {
-            console.error('Login error:', error)
+            console.error('Login error:', error);
         }
     }
 </script>

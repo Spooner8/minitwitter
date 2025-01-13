@@ -27,16 +27,16 @@
           <!-- Profile dropdown -->
           <Menu as="div" class="relative ml-3">
             <div>
-              <MenuButton @click="handleProfileClick" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+              <MenuButton class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                 <span class="absolute -inset-1.5" />
                 <span class="sr-only">Open user menu</span>
                 <Icon name="lucide:circle-user" style="color: cornflowerblue" size="32" />
               </MenuButton>
             </div>
-            <transition v-if="isLoggedIn" enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+            <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
               <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
                 <MenuItem v-slot="{ active }">
-                    <a href="#" @click.prevent="logout" :class="[active ? 'bg-gray-100 outline-none' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
+                    <a href="#" @click.prevent="handleAuthAction" :class="[active ? 'bg-gray-100 outline-none' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ isLoggedIn ? 'Logout' : 'Login' }}</a>
                 </MenuItem>
               </MenuItems>
             </transition>
@@ -61,47 +61,53 @@
   import { ref, onMounted } from 'vue'
   import axios from 'axios'
 
-  const route = useRoute()
-  const router = useRouter()
-  const isLoggedIn = ref(false)
+  const route = useRoute();
+  const router = useRouter();
+  const isLoggedIn = ref(false);
 
   const navigation = [
     { name: 'Home', href: '/', current: false },
     { name: 'About', href: '/about', current: false },
-  ]
+  ];
+
+  const checkLoginStatus = async () => {
+    try {
+      const response = await axios.get('/api/auth/loginstatus');
+      isLoggedIn.value = response.data.isLoggedIn;
+    } catch (error) {
+      console.error('Login status error:', error);
+      isLoggedIn.value = false;
+    }
+  }
 
   onMounted(() => {
-    const cookies: Record<string, string> = document.cookie.split(';').reduce((acc, cookie) => {
-      const [name, value] = cookie.split('=').map(c => c.trim())
-      acc[name] = decodeURIComponent(value)
-      return acc
-    }, {} as Record<string, string>)
-    const token = cookies.jwt
-    isLoggedIn.value = !!token
-    console.log({ "cookies": cookies, "token": token, "isLoggedIn": isLoggedIn.value })
+    checkLoginStatus();
   })
 
+  watch(route, () => {
+    checkLoginStatus();
+  })
 
   navigation.forEach(item => {
-    item.current = item.href === route.path
-  })
+    item.current = item.href === route.path;
+  });
 
-  const handleProfileClick = () => {
-    if (!isLoggedIn.value) {
-      router.push('/login')
-    }
+  const handleAuthAction = async () => {
+    isLoggedIn.value ? await logout() : router.push('/login');
   }
 
   const logout = async () => {
         try {
-            const response = await axios.post('/api/auth/logout')
+            const response = await axios.get('/api/auth/logout')
             if (response.status === 200) {
-                router.push('/')
+                isLoggedIn.value = false;
+                await checkLoginStatus();
+                router.push('/');
             } else {
-                alert('Logout failed')
+                alert('Logout failed');
             }
         } catch (error) {
-            console.error('Logout error:', error)
+            console.error('Logout error:', error);
         }
     }
 </script>

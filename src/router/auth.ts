@@ -31,4 +31,18 @@ router.get('/api/auth/logout', (_req: Request, res: Response) => {
     }
 });
 
+router.get('/api/auth/loginstatus', async (req: Request, res: Response) => {
+    try {
+        const user = await authService.getCurrentUser(req, res);
+    if (user) {
+        res.status(200).json({ isLoggedIn: true, user });
+    } else {
+        res.status(200).json({ isLoggedIn: false });
+    }
+    } catch (error: any) {
+        console.log(error);
+        res.status(400).send({ message: error.message });
+    }
+});
+
 export default router;
