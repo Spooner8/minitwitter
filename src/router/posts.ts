@@ -42,7 +42,7 @@ router.post('/api/posts', detectHateSpeech, async (req: Request, res: Response) 
     }
 });
 
-router.post('/api/posts/generate', async (req: Request, res: Response) => {
+router.post('/api/posts/generate', isUser, async (req: Request, res: Response) => {
     try {
         const user = await authService.getCurrentUser(req, res);
         const response = user?.id && await postService.generatePost(user.id);
