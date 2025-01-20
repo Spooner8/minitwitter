@@ -11,6 +11,13 @@
 <script setup lang="ts">
 import PostCard from '~/components/PostCard.vue';
 
+definePageMeta({
+  middleware: 'auth',
+  layout: 'default',
+  title: 'Your Feed',
+  description: 'This page is protected and requires login'
+})
+
 interface IPost {
   id: number;
   content: string;
@@ -42,6 +49,4 @@ if (posts.value) {
     }
   }
 }
-
-
 </script>
