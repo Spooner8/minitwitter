@@ -82,17 +82,7 @@ services:
             - minitwitter
         restart: always
 
-    app-1:
-        build:
-            context: frontend
-            dockerfile: Dockerfile
-        container_name: app-1
-        image: spoonersl/minitwitter-app
-        environment:
-            NUXT_PUBLIC_API_BASE_URL: http://localhost:80
-        networks:
-        - minitwitter
-        restart: always
+
 volumes:
     minitwitter-db:
     minitwitter-ollama:
