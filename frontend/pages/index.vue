@@ -3,7 +3,7 @@
     <h1 class="text-2xl font-extrabold mb-4">Your Feed</h1>
     <div class="flex flex-wrap">
       <PostCard v-for="post in postsWithUsernames" :key="post.id" :username="post.username" :content="post.content"
-        :created_at="post.created_at" :userId="post.userId" />
+        :created_at="post.created_at" :userId="post.userId" :postId="post.id" @postDeleted="removePost"/>
     </div>
   </div>
 </template>
@@ -48,5 +48,9 @@
         postsWithUsernames.value.push({ ...post, username: user.username, created_at: localTime });
       }
     }
+  }
+
+  const removePost = (postId: number) => {
+    postsWithUsernames.value = postsWithUsernames.value.filter((post) => post.id !== postId);
   }
 </script>
