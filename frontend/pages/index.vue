@@ -2,28 +2,21 @@
   <div>
     <h1 class="text-2xl font-extrabold mb-4">Your Feed</h1>
     <div class="flex flex-wrap">
-      <PostCard v-for="post in postsWithUsernames" :key="post.id" :username="post.username" :content="post.content"
-        :created_at="post.created_at" :userId="post.userId" :postId="post.id" @postDeleted="removePost"/>
+      <PostCard v-for="post in postsWithUsernames" :key="post.id" :post="post" @postDeleted="removePost" @postUpdated="updatePost"/>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import PostCard from '~/components/PostCard.vue';
+  import type IPost from '../models/post';
 
   definePageMeta({
     middleware: 'auth',
     layout: 'default',
     title: 'Your Feed',
     description: 'This page is protected and requires login'
-  })
-
-  interface IPost {
-    id: number;
-    content: string;
-    created_at: string;
-    userId: number;
-  }
+  });
 
   interface IUser {
     id: number;
@@ -38,15 +31,17 @@
     for (const post of posts) {
       const { data: user } = await api.get<IUser>(`/api/user/${post.userId}`);
       if (user) {
-        const localTime = new Date(post.created_at).toLocaleString(undefined, {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-        });
-        postsWithUsernames.value.push({ ...post, username: user.username, created_at: localTime });
+        postsWithUsernames.value.push({ ...post, username: user.username, created_at: post.created_at });
       }
+    }
+  }
+
+  //FIXME: Post is not updating in the frontend. Update is visible only after refreshing the page.
+  const updatePost = (postId: number, updatedContent: string, updated_at: Date) => {
+    const post = postsWithUsernames.value.find((post) => post.id === postId);
+    if (post) {
+      post.content = updatedContent;
+      post.updated_at = updated_at;
     }
   }
 
