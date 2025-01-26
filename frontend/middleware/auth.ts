@@ -1,17 +1,13 @@
-import { defineNuxtRouteMiddleware, navigateTo, useNuxtApp } from '#imports'
-import type { AxiosInstance } from 'axios'
+import axios from 'axios'
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
-  const nuxtApp = useNuxtApp()
-  const $axios = nuxtApp.$axios as AxiosInstance
-
+export default defineNuxtRouteMiddleware(async () => {
   try {
-    const response = await $axios.get('/api/auth/loginstatus')
+    const response = await axios.get('/api/auth/loginstatus')
     if (!response.data.isLoggedIn) {
-      return navigateTo('/login-required')
+      return navigateTo('/login-required');
     }
   } catch (error) {
-    console.error('Error checking login status:', error)
-    return navigateTo('/login-required')
+    console.error('Error checking login status:', error);
+    return navigateTo('/login-required');
   }
-})
+});
