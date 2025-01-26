@@ -12,9 +12,19 @@ import authRouter from '../router/auth.ts';
 import userRouter from '../router/user.ts';
 
 export const initializeAPI = (app: Express) => {
+    const allowedOrigins = [
+        'http://localhost:80',
+        'http://localhost:4000'
+    ];
+
+    const corsOptions = {
+        origin: allowedOrigins,
+        credentials: true,
+    };
+
     app.use(bodyParser.json());
     app.use(cookieParser());
-    app.use(cors());
+    app.use(cors(corsOptions));
 
     // Router
     app.use(postsRouter);
