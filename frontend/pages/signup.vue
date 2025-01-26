@@ -31,7 +31,6 @@
     const username = ref('');
     const password = ref('');
     const confirmPassword = ref('');
-    const router = useRouter();
 
     const signup = async () => {
         if (password.value !== confirmPassword.value) {
@@ -45,7 +44,7 @@
                 password: password.value
             });
             if (response.data.success) {
-                router.push('/login');
+                navigateTo('/login');
             } else {
                 alert('Signup failed');
             }

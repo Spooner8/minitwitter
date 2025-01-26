@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
     import { ref } from 'vue'
-    import { useRouter } from 'vue-router'
     import axios from 'axios'
 
     definePageMeta({
@@ -32,7 +31,6 @@
 
     const username = ref('');
     const password = ref('');
-    const router = useRouter();
 
     const login = async () => {
         try {
@@ -41,7 +39,7 @@
                 password: password.value
             });
             if (response.status === 200) {
-                router.push('/');
+                navigateTo('/');
             } else {
                 alert('Login failed');
             }

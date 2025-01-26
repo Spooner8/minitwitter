@@ -7,17 +7,13 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+  definePageMeta({
+    layout: 'default',
+    title: 'Login Required',
+    description: 'You must be logged in to view this page.'
+  })
 
-definePageMeta({
-  layout: 'default',
-  title: 'Login Required',
-  description: 'You must be logged in to view this page.'
-})
-
-const router = useRouter()
-
-const goToLogin = () => {
-  router.push('/login')
-}
+  const goToLogin = () => {
+    navigateTo('/login')
+  }
 </script>
