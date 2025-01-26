@@ -9,44 +9,45 @@
 </template>
 
 <script setup lang="ts">
-import PostCard from '~/components/PostCard.vue';
+  import PostCard from '~/components/PostCard.vue';
+  import axios from 'axios';
 
-definePageMeta({
-  middleware: 'auth',
-  layout: 'default',
-  title: 'Your Feed',
-  description: 'This page is protected and requires login'
-})
+  definePageMeta({
+    middleware: 'auth',
+    layout: 'default',
+    title: 'Your Feed',
+    description: 'This page is protected and requires login'
+  })
 
-interface IPost {
-  id: number;
-  content: string;
-  created_at: string;
-  userId: number;
-}
+  interface IPost {
+    id: number;
+    content: string;
+    created_at: string;
+    userId: number;
+  }
 
-interface IUser {
-  id: number;
-  username: string;
-}
+  interface IUser {
+    id: number;
+    username: string;
+  }
 
-const { baseUrl } = useApi();
-const postsWithUsernames = ref<(IPost & { username: string })[]>([]);
-const { data: posts } = await useFetch<IPost[]>(`${baseUrl}/api/posts`);
+  const { baseUrl } = useApi();
+  const postsWithUsernames = ref<(IPost & { username: string })[]>([]);
+  const { data: posts } = await axios.get<IPost[]>(`${baseUrl}/api/posts`);
 
-if (posts.value) {
-  for (const post of posts.value) {
-    const { data: user } = await useFetch<IUser>(`${baseUrl}/api/user/${post.userId}`);
-    if (user.value) {
-      const localTime = new Date(post.created_at).toLocaleString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-      postsWithUsernames.value.push({ ...post, username: user.value.username, created_at: localTime });
+  if (posts && posts.length > 0) {
+    for (const post of posts) {
+      const { data: user } = await axios.get<IUser>(`${baseUrl}/api/user/${post.userId}`);
+      if (user) {
+        const localTime = new Date(post.created_at).toLocaleString(undefined, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+        postsWithUsernames.value.push({ ...post, username: user.username, created_at: localTime });
+      }
     }
   }
-}
 </script>
