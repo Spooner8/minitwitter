@@ -1,5 +1,3 @@
-import { ref } from 'vue';
-
 export function useCurrentUser() {
     interface IUser {
         id: number;
