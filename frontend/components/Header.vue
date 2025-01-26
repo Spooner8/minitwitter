@@ -25,6 +25,7 @@
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
           <!-- Profile dropdown -->
+          <p>{{ currentUser?.username }}</p>
           <Menu as="div" class="relative ml-3">
             <div>
               <MenuButton class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -35,8 +36,8 @@
             </div>
             <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
               <MenuItems class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
-                <MenuItem v-slot="{ active }">
-                    <a href="#" @click.prevent="handleAuthAction" :class="[active ? 'bg-gray-100 outline-none' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ isLoggedIn ? 'Logout' : 'Login' }}</a>
+                <MenuItem v-slot="{ active }" as="div">
+                    <a href="#" @click.prevent="handleAuthAction" :class="[active ? 'bg-gray-100 outline-none' : '', 'block px-4 py-2 text-sm text-gray-700']">{{ currentUser ? 'Logout' : 'Login' }}</a>
                 </MenuItem>
               </MenuItems>
             </transition>
@@ -59,24 +60,22 @@
   import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
   import { useRoute } from 'vue-router'
   import { onMounted } from 'vue'
-  import axios from 'axios'
-  import { useLoginStatus } from '~/composables/useLoginStatus'
 
   const route = useRoute();
-  const { isLoggedIn, checkLoginStatus } = useLoginStatus();
   const { api } = useApi();
+  const { currentUser, getCurrentUser } = useCurrentUser();
 
   const navigation = [
     { name: 'Home', href: '/', current: false },
     { name: 'About', href: '/about', current: false },
   ];
 
-  onMounted(() => {
-    checkLoginStatus();
+  onMounted(async () => {
+    await getCurrentUser();
   })
 
-  watch(route, () => {
-    checkLoginStatus();
+  watch(route, async () => {
+    await getCurrentUser();
   })
 
   navigation.forEach(item => {
@@ -84,14 +83,14 @@
   });
 
   const handleAuthAction = async () => {
-    isLoggedIn.value ? await logout() : navigateTo('/login');
+    currentUser.value ? await logout() : navigateTo('/login');
   }
 
   const logout = async () => {
         try {
             const response = await api.get('/api/auth/logout');
             if (response.status === 200) {
-                await checkLoginStatus();
+                await getCurrentUser();
                 window.location.reload();
             } else {
                 alert('Logout failed');
