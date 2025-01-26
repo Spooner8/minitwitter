@@ -66,7 +66,7 @@ router.put('/api/posts/:id', isOwner, async (req: Request, res: Response) => {
         if (!response) {
             res.status(404).send({ message: 'Post not found' });
         } else {
-            res.status(200).send({ 'Post updated': response });
+            res.status(200).send({ message: 'success', updated_post: response });
         }
     } catch (error: any) {
         console.log(error);

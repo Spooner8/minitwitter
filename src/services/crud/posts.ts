@@ -57,10 +57,13 @@ async function updatePost(id: number, content: string) {
         .update(postsTable)
         .set({
             content: content,
+            updated_at: new Date(),
         })
-        .where(eq(postsTable.id, id));
+        .where(eq(postsTable.id, id))
+        .returning();
 }
 
+// TODO: Change from deleting to set date deleted_at an filter in frontend to this field
 async function deletePost(id: number) {
     return await db.delete(postsTable).where(eq(postsTable.id, id));
 }

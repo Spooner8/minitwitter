@@ -4,69 +4,98 @@
     <div class="flex flex-col flex-grow px-6 pt-6">
       <div class="flex flex-row justify-between">
         <h1 class="text-lg font-bold text-gray-300">#{{ username }}</h1>
-        <button v-if="isOwner" class="text-gray-500 hover:text-blue-500" @click="editPost">
+        <button v-if="isOwner" class="text-gray-500 hover:text-blue-500" @click="changeEditMode">
           <Icon class="editPostIcon" name="lucide:square-pen" size="24" />
         </button>
       </div>
       <hr class="mt-2 mb-2 border-gray-500">
       <p v-if="!editMode" class="mt-1 max-w-2xl text-gray-300 flex-grow py-4">{{ content }}</p>
       <textarea v-if="editMode" class="bg-gray-700 text-gray-300 flex-grow my-4 p-2 rounded"
-        rows="12">{{ content }}</textarea>
+        rows="12" v-model="modifiedContent">{{ content }}</textarea>
       <hr class="mt-2 mb-2 border-gray-500">
     </div>
     <div class="flex flex-row justify-between px-4">
       <div :class="{ 'invisible': !editMode }" class="flex flex-row ps-2">
-        <button class="text-gray-500 hover:text-green-700 me-4">
+        <button class="text-gray-500 hover:text-green-700 me-4" @click="savePost">
           <Icon class="editPostIcon" name="lucide:save" size="24" />
         </button>
         <button class="text-gray-500 hover:text-red-500" @click="deletePost">
           <Icon class="editPostIcon" name="lucide:trash-2" size="24" />
         </button>
       </div>
-      <p class="m-4 text-sm text-gray-500 self-end">{{ created_at }}</p>
+      <p class="m-4 text-sm text-gray-500 self-end">{{ updated_at ?? created_at }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useCurrentUser } from '~/composables/useCurrentUser';
+import type IPost from '~/models/post';
+import { useLocalDateTimeFormatter } from '~/composables/useLocalDateTimeFormatter';
 
-const props = defineProps({
-  postId: Number,
-  userId: Number,
-  username: String,
-  content: String,
-  created_at: String,
-});
+interface IExtendedPost extends IPost {
+  username: string;
+}
 
-const emit = defineEmits(['postDeleted']);
+const props = defineProps<{
+  post: IExtendedPost;
+}>();
 
 const { api } = useApi();
-const isOwner = ref(false);
+const { username, content, userId, id } = props.post;
 const { currentUser, getCurrentUser } = useCurrentUser();
+const { getLocalDateTimeString } = useLocalDateTimeFormatter();
+const created_at = computed(() => getLocalDateTimeString(new Date(props.post.created_at)));
+const updated_at = ref(props.post.updated_at ? getLocalDateTimeString(new Date(props.post.updated_at)) : null);
+
+const isOwner = ref(false);
 const editMode = ref(false);
+const modifiedContent = ref(content);
+
+const emit = defineEmits(['postDeleted', 'postUpdated']);
 
 onMounted(async () => {
   await getCurrentUser();
-  if (currentUser.value && currentUser.value.id === props.userId) {
+  if (currentUser.value && currentUser.value.id === userId) {
     isOwner.value = true;
   }
 });
 
-const editPost = () => {
-  editMode.value = !editMode.value;
+const savePost = async () => {
+  if (modifiedContent.value === content) {
+    try {
+      const response = await api.put(`/api/posts/${id}`, { content: modifiedContent.value });
+
+      if(response.status === 200) {
+        const updated_at_date = getLocalDateTimeString(response.data.updated_post[0].updated_at);
+        updated_at.value = updated_at_date;
+        emit('postUpdated', id, modifiedContent.value, updated_at_date);
+        changeEditMode();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  try {
+    api.put(`/api/posts/${id}`, { content: modifiedContent.value });
+    changeEditMode();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-const savePost = () => {
-  // Save the post
+const changeEditMode = () => {
+  editMode.value = !editMode.value;
+  modifiedContent.value = content;
 }
 
 const deletePost = async () => {
   const answer = confirm('Are you sure you want to delete this post?');
   if (!answer) return;
   try {
-    await api.delete(`/api/posts/${props.postId}`);
-    emit('postDeleted', props.postId);
+    await api.delete(`/api/posts/${id}`);
+    emit('postDeleted', id);
   } catch (error) {
     console.error(error);
   }
