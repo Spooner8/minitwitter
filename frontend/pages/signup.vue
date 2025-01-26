@@ -19,8 +19,8 @@
 
 <script setup lang="ts">
     import { ref } from 'vue'
-    import { useRouter } from 'vue-router'
-    import axios from 'axios'
+
+    const { api } = useApi();
 
     definePageMeta({
         layout: 'default',
@@ -39,7 +39,7 @@
         }
 
         try {
-            const response = await axios.post('/api/signup', {
+            const response = await api.post('/api/user/signup', {
                 username: username.value,
                 password: password.value
             });

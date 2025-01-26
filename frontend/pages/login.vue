@@ -21,7 +21,8 @@
 
 <script setup lang="ts">
     import { ref } from 'vue'
-    import axios from 'axios'
+
+    const { api } = useApi();
 
     definePageMeta({
         layout: 'default',
@@ -34,7 +35,7 @@
 
     const login = async () => {
         try {
-            const response = await axios.post('/api/auth/login', {
+            const response = await api.post('/api/auth/login', {
                 username: username.value,
                 password: password.value
             });

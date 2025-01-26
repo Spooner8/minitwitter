@@ -1,8 +1,8 @@
-import axios from 'axios'
-
 export default defineNuxtRouteMiddleware(async () => {
+  const { api } = useApi();
+
   try {
-    const response = await axios.get('/api/auth/loginstatus')
+    const response = await api.get('/api/auth/loginstatus');
     if (!response.data.isLoggedIn) {
       return navigateTo('/login-required');
     }

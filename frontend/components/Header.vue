@@ -64,6 +64,7 @@
 
   const route = useRoute();
   const { isLoggedIn, checkLoginStatus } = useLoginStatus();
+  const { api } = useApi();
 
   const navigation = [
     { name: 'Home', href: '/', current: false },
@@ -88,7 +89,7 @@
 
   const logout = async () => {
         try {
-            const response = await axios.get('/api/auth/logout')
+            const response = await api.get('/api/auth/logout');
             if (response.status === 200) {
                 await checkLoginStatus();
                 window.location.reload();
