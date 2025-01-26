@@ -57,28 +57,18 @@
 <script setup lang="ts">
   import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
   import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
-  import { useRoute, useRouter } from 'vue-router'
-  import { ref, onMounted } from 'vue'
+  import { useRoute } from 'vue-router'
+  import { onMounted } from 'vue'
   import axios from 'axios'
+  import { useLoginStatus } from '~/composables/useLoginStatus'
 
   const route = useRoute();
-  const router = useRouter();
-  const isLoggedIn = ref(false);
+  const { isLoggedIn, checkLoginStatus } = useLoginStatus();
 
   const navigation = [
     { name: 'Home', href: '/', current: false },
     { name: 'About', href: '/about', current: false },
   ];
-
-  const checkLoginStatus = async () => {
-    try {
-      const response = await axios.get('/api/auth/loginstatus');
-      isLoggedIn.value = response.data.isLoggedIn;
-    } catch (error) {
-      console.error('Login status error:', error);
-      isLoggedIn.value = false;
-    }
-  }
 
   onMounted(() => {
     checkLoginStatus();
@@ -93,16 +83,15 @@
   });
 
   const handleAuthAction = async () => {
-    isLoggedIn.value ? await logout() : router.push('/login');
+    isLoggedIn.value ? await logout() : navigateTo('/login');
   }
 
   const logout = async () => {
         try {
             const response = await axios.get('/api/auth/logout')
             if (response.status === 200) {
-                isLoggedIn.value = false;
                 await checkLoginStatus();
-                router.push('/');
+                window.location.reload();
             } else {
                 alert('Logout failed');
             }
