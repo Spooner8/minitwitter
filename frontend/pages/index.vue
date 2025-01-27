@@ -38,10 +38,18 @@
 
   //FIXME: Post is not updating in the frontend. Update is visible only after refreshing the page.
   const updatePost = (postId: number, updatedContent: string, updated_at: Date) => {
-    const post = postsWithUsernames.value.find((post) => post.id === postId);
-    if (post) {
-      post.content = updatedContent;
-      post.updated_at = updated_at;
+    const index = postsWithUsernames.value.findIndex((post) => post.id === postId);
+    if (index !== -1) {
+      // Create a copy of the array
+      const updatedPosts = [...postsWithUsernames.value];
+      // Replace the old post with a new object
+      updatedPosts[index] = { 
+        ...updatedPosts[index], 
+        content: updatedContent, 
+        updated_at: updated_at 
+      };
+      // Assign the new array to trigger reactivity
+      postsWithUsernames.value = updatedPosts;
     }
   }
 
