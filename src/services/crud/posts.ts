@@ -13,7 +13,7 @@ export const postService = {
     createPost,
     generatePost,
     updatePost,
-    deletePost,
+    softDeletePost,
 };
 
 async function getPosts() {
@@ -63,7 +63,9 @@ async function updatePost(id: number, content: string) {
         .returning();
 }
 
-// TODO: Change from deleting to set date deleted_at an filter in frontend to this field
-async function deletePost(id: number) {
-    return await db.delete(postsTable).where(eq(postsTable.id, id));
+async function softDeletePost(id: number) {
+    return await db.update(postsTable)
+        .set({ deleted_at: new Date() })
+        .where(eq(postsTable.id, id))
+        .returning();
 }
