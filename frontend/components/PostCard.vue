@@ -94,7 +94,7 @@ const deletePost = async () => {
   const answer = confirm('Are you sure you want to delete this post?');
   if (!answer) return;
   try {
-    await api.put(`/api/posts/${id}/soft-delete`);
+    await api.delete(`/api/posts/${id}`);
     emit('postDeleted', id);
   } catch (error) {
     console.error(error);

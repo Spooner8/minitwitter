@@ -12,10 +12,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 
+const { api } = useApi();
 const content = ref('');
-
 const emit = defineEmits(['close', 'postCreated']);
 
 const cancel = () => {
@@ -24,7 +23,6 @@ const cancel = () => {
 
 const post = async () => {
   try {
-    const { api } = useApi();
     const response = await api.post('/api/posts', { content: content.value });
     if (response.status === 201) {
       emit('postCreated', response.data[0]);
