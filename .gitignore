@@ -201,3 +201,6 @@ logs
 .env
 .env.*
 !.env.example
+frontend/package-lock.json
+package-lock.json
+frontend/package-lock.json
