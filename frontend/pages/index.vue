@@ -1,14 +1,18 @@
 <template>
   <div>
     <h1 class="text-2xl font-extrabold mb-4">Your Feed</h1>
+    <button @click="showNewPostModal = true" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">New Post</button>
     <div class="flex flex-wrap">
       <PostCard v-for="post in postsWithUsernames" :key="post.id" :post="post" @postDeleted="removePost" @postUpdated="updatePost"/>
     </div>
+    <NewPostModal v-if="showNewPostModal" @close="showNewPostModal = false" @postCreated="addPost"/>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { ref } from 'vue';
   import PostCard from '~/components/PostCard.vue';
+  import NewPostModal from '~/components/NewPostModal.vue';
   import type IPost from '../models/post';
 
   definePageMeta({
@@ -36,19 +40,22 @@
     }
   }
 
-  //FIXME: Post is not updating in the frontend. Update is visible only after refreshing the page.
+  const showNewPostModal = ref(false);
+
+  const addPost = (newPost: IPost) => {
+    postsWithUsernames.value.unshift({ ...newPost, username: 'Your Username' }); // Replace 'Your Username' with the actual username
+    showNewPostModal.value = false;
+  };
+
   const updatePost = (postId: number, updatedContent: string, updated_at: Date) => {
     const index = postsWithUsernames.value.findIndex((post) => post.id === postId);
     if (index !== -1) {
-      // Create a copy of the array
       const updatedPosts = [...postsWithUsernames.value];
-      // Replace the old post with a new object
       updatedPosts[index] = { 
         ...updatedPosts[index], 
         content: updatedContent, 
         updated_at: updated_at 
       };
-      // Assign the new array to trigger reactivity
       postsWithUsernames.value = updatedPosts;
     }
   }

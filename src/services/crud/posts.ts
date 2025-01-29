@@ -3,6 +3,7 @@ import { postsTable } from '../../schemas';
 import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
 import 'dotenv/config';
+import { del } from 'ollama/src/utils.js';
 
 const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
 const ollama = new Ollama({ host: OLLAMA_BASE_URL });
@@ -14,6 +15,9 @@ export const postService = {
     generatePost,
     updatePost,
     softDeletePost,
+    deletePost: async function deletePost(id: number) {
+        return await db.delete(postsTable).where(eq(postsTable.id, id)).returning();
+    },
 };
 
 async function getPosts() {
@@ -53,19 +57,9 @@ async function generatePost(userId: number) {
 }
 
 async function updatePost(id: number, content: string) {
-    return await db
-        .update(postsTable)
-        .set({
-            content: content,
-            updated_at: new Date(),
-        })
-        .where(eq(postsTable.id, id))
-        .returning();
+    return await db.update(postsTable).set({ content }).where(eq(postsTable.id, id)).returning();
 }
 
 async function softDeletePost(id: number) {
-    return await db.update(postsTable)
-        .set({ deleted_at: new Date() })
-        .where(eq(postsTable.id, id))
-        .returning();
+    return await db.update(postsTable).set({ deleted_at: new Date() }).where(eq(postsTable.id, id)).returning();
 }

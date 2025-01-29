@@ -34,7 +34,7 @@ router.post('/api/posts', detectHateSpeech, async (req: Request, res: Response) 
         if (!response) {
             res.status(401).send({ message: 'Post not created' });
         } else {
-            res.status(201).send({ 'Post created': response });
+            res.status(201).send(response);
         }
     } catch (error: any) {
         console.log(error);

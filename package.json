@@ -7,6 +7,7 @@
         "@types/cookie": "^0.6.0",
         "@types/cookie-parser": "^1.4.8",
         "@types/pg": "^8.11.10",
+        "@types/vue": "^1.0.31",
         "drizzle-kit": "^0.28.1",
         "tsx": "^4.19.2"
     },
@@ -31,7 +32,8 @@
         "jsonwebtoken": "^9.0.2",
         "ollama": "^0.5.10",
         "pg": "^8.13.1",
-        "uuid": "^11.0.2"
+        "uuid": "^11.0.2",
+        "vue": "^3.5.13"
     },
     "scripts": {
         "dev": "bun --watch ./src/app.ts",
