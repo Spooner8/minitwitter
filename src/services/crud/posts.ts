@@ -1,11 +1,9 @@
-import { Ollama } from 'ollama';
+// import { Ollama } from 'ollama';
 import { postsTable } from '../../schemas';
 import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
 import 'dotenv/config';
-
-const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
-const ollama = new Ollama({ host: OLLAMA_BASE_URL });
+import { ollama, OLLAMA_MODEL } from '../ai/ai.ts';
 
 export const postService = {
     getPosts,
@@ -35,7 +33,7 @@ async function createPost(userId: number, content: string) {
 
 async function generatePost(userId: number) {
     const content = await ollama.chat({
-        model: 'llama3.2:1b',
+        model: OLLAMA_MODEL,
         messages: [
             {
                 role: 'user',
