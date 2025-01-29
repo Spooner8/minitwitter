@@ -3,10 +3,11 @@ import { Router } from 'express';
 import { postService } from '../services/crud/posts.ts';
 import { isUser, isOwner } from '../middleware/auth.ts';
 import { authService } from '../services/auth/auth.ts';
+import { detectHateSpeech } from '../middleware/detector.ts';
 
 const router = Router();
 
-router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
+router.get('/api/posts', async (_req: Request, res: Response) => {
     try {
         const posts = await postService.getPosts();
         if (!posts) {
@@ -20,7 +21,7 @@ router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
     }
 });
 
-router.post('/api/posts', async (req: Request, res: Response) => {
+router.post('/api/posts', detectHateSpeech, async (req: Request, res: Response) => {
     try {
         const { content } = req.body;
         const user = await authService.getCurrentUser(req, res);
@@ -33,7 +34,7 @@ router.post('/api/posts', async (req: Request, res: Response) => {
         if (!response) {
             res.status(401).send({ message: 'Post not created' });
         } else {
-            res.status(201).send({ 'Post created': response });
+            res.status(201).send(response);
         }
     } catch (error: any) {
         console.log(error);
@@ -41,7 +42,7 @@ router.post('/api/posts', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/api/posts/generate', async (req: Request, res: Response) => {
+router.post('/api/posts/generate', isUser, async (req: Request, res: Response) => {
     try {
         const user = await authService.getCurrentUser(req, res);
         const response = user?.id && await postService.generatePost(user.id);
@@ -65,7 +66,7 @@ router.put('/api/posts/:id', isOwner, async (req: Request, res: Response) => {
         if (!response) {
             res.status(404).send({ message: 'Post not found' });
         } else {
-            res.status(200).send({ 'Post updated': response });
+            res.status(200).send({ message: 'success', updated_post: response });
         }
     } catch (error: any) {
         console.log(error);

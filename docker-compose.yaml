@@ -28,6 +28,9 @@ services:
         restart: always
 
     api-1:
+        build:
+            context: .
+            dockerfile: Dockerfile
         container_name: api-1
         image: spoonersl/minitwitter
         environment:
@@ -41,6 +44,9 @@ services:
         restart: always
 
     api-2:
+        build:
+            context: .
+            dockerfile: Dockerfile
         container_name: api-2
         image: spoonersl/minitwitter
         environment:
@@ -53,16 +59,29 @@ services:
             - minitwitter
         restart: always
 
+    app-1:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        container_name: app-1
+        image: spoonersl/minitwitter-app
+        environment:
+            NUXT_PUBLIC_API_BASE_URL: http://localhost:80
+        networks:
+            - minitwitter
+        restart: always
+
     ollama-1:
         container_name: ollama-1
         image: ollama/ollama
         ports:
-            - '11434:11434'            
+            - '11434:11434'
         volumes:
             - minitwitter-ollama:/root/.ollama
         networks:
             - minitwitter
         restart: always
+
 
 volumes:
     minitwitter-db:

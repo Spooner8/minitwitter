@@ -57,10 +57,12 @@ async function updatePost(id: number, content: string) {
         .update(postsTable)
         .set({
             content: content,
+            updated_at: new Date(),
         })
-        .where(eq(postsTable.id, id));
+        .where(eq(postsTable.id, id))
+        .returning();
 }
 
 async function deletePost(id: number) {
-    return await db.delete(postsTable).where(eq(postsTable.id, id));
+    return await db.update(postsTable).set({ deleted_at: new Date() }).where(eq(postsTable.id, id)).returning();
 }
