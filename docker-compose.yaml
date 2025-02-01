@@ -82,6 +82,15 @@ services:
             - minitwitter
         restart: always
 
+    redis:
+        image: redis/redis-stack:latest
+        container_name: redis
+        ports:
+            - '6379:6379'
+            - '8001:8001'
+        networks:
+            - minitwitter
+        restart: always
 
 volumes:
     minitwitter-db:
