@@ -19,8 +19,8 @@ export const initializeOllama = async () => {
   })
   // This will pull the model from the server
   // ⚠️ Can take a few minutes ⚠️
-  console.log('Pulling model from server... This can take a few minutes')
-  await ollama.pull({ model: OLLAMA_MODEL })
+  // console.log('Pulling model from server... This can take a few minutes')
+  // await ollama.pull({ model: OLLAMA_MODEL })
 }
 
 const TextAnalysisResult = z.object({
