@@ -1,6 +1,7 @@
 import { Ollama } from 'ollama'
 import { z } from 'zod'
 import zodToJsonSchema from 'zod-to-json-schema'
+import 'dotenv/config'
 
 // Test other models from ollama
 // ⚠️ Not more than 7 billion parameters ⚠️
@@ -11,7 +12,7 @@ export let ollama: Ollama
 export const initializeOllama = async () => {
   if (ollama) return
   console.log('Initializing Ollama...')
-  const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://localhost:11434'
+  const OLLAMA_HOST = process.env.OLLAMA_BASE_URL || 'http://localhost:11434'
   console.log('Initializing Ollama with model:', OLLAMA_MODEL)
   console.log('Using Ollama host:', OLLAMA_HOST)
   ollama = new Ollama({
