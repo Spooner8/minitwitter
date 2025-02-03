@@ -3,7 +3,7 @@ import { postsTable } from '../../schemas';
 import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
 import 'dotenv/config';
-import { ollama, OLLAMA_MODEL } from '../ai_temp/ai.ts';
+import { ollama, OLLAMA_MODEL } from '../ai/ai.ts';
 
 export const postService = {
     getPosts,
