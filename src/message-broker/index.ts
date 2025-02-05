@@ -15,11 +15,14 @@ let sentimentWorker: Worker;
  * Sollte beim Starten der App (z. B. in app.ts) aufgerufen werden.
  */
 export const initializeMessageBroker = () => {
+  const redisHost = process.env.REDIS_HOST || 'localhost';
+  const redisPort = parseInt(process.env.REDIS_PORT || '6379');
   const connection = new IORedis({
-    host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT || '6379'),
+    host: redisHost,
+    port: redisPort,
     maxRetriesPerRequest: null,
   });
+  console.log(`Connecting to Redis at ${redisHost}:${redisPort}`);
 
   // Die Queue, in die wir Jobs einstellen können
   sentimentQueue = new Queue('sentiment', { connection });

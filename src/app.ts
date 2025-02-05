@@ -6,6 +6,6 @@ import { initializeOllama } from './services/ai/ai.ts';
 
 const app = express();
 
-// initializeMessageBroker();
 initializeAPI(app);
+initializeMessageBroker();
 await initializeOllama();
