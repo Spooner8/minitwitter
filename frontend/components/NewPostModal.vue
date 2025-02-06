@@ -38,9 +38,9 @@ const post = async () => {
 
 const generatePost = async () => {
   try {
-    const response = await api.post('/api/posts/generate');
+    const response = await api.get('/api/posts/generate');
     if (response.status === 201) {
-      content.value = response.data['Post generated'][0].content;
+      content.value = response.data.content;
     } else {
       alert('Failed to generate post');
     }

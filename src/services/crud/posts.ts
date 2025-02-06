@@ -29,7 +29,7 @@ async function createPost(userId: number, content: string) {
     return await db.insert(postsTable).values(post).returning();
 }
 
-async function generatePost(userId: number) {
+async function generatePost() {
     const content = await ollama.chat({
         model: OLLAMA_MODEL,
         messages: [
@@ -40,19 +40,15 @@ async function generatePost(userId: number) {
             },
         ],
     });
-    const post: typeof postsTable.$inferInsert = {
-        userId: userId,
-        content: content.message.content,
-    };
 
-    return await db.insert(postsTable).values(post).returning();
+    return content.message.content;
 }
 
-async function updatePost(id: number, content: string) {
+async function updatePost(id: number, updates: Partial<typeof postsTable.$inferInsert>) {
     return await db
         .update(postsTable)
         .set({
-            content: content,
+            ...updates,
             updated_at: new Date(),
         })
         .where(eq(postsTable.id, id))
