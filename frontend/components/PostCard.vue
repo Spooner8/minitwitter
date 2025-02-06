@@ -67,22 +67,15 @@ const savePost = async () => {
       const response = await api.put(`/api/posts/${id}`, { content: modifiedContent.value });
 
       if(response.status === 200) {
-        const updated_at_date = getLocalDateTimeString(response.data.updated_post[0].updated_at);
+        const updated_at_date = getLocalDateTimeString(new Date(response.data.updated_post[0].updated_at));
         updated_at.value = updated_at_date;
         emit('postUpdated', id, modifiedContent.value, updated_at_date);
-        changeEditMode();
       }
     } catch (error) {
       console.error(error);
     }
   }
-
-  try {
-    api.put(`/api/posts/${id}`, { content: modifiedContent.value });
-    changeEditMode();
-  } catch (error) {
-    console.error(error);
-  }
+  changeEditMode();
 }
 
 const changeEditMode = () => {
