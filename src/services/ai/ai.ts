@@ -18,8 +18,6 @@ export const initializeOllama = async () => {
   ollama = new Ollama({
     host: OLLAMA_HOST,
   })
-  // This will pull the model from the server
-  // ⚠️ Can take a few minutes ⚠️
   console.log('Pulling model from server... This can take a few minutes')
   await ollama.pull({ model: OLLAMA_MODEL })
 }
@@ -30,11 +28,12 @@ const TextAnalysisResult = z.object({
 })
 
 export async function textAnalysis(text: string) {
-  await initializeOllama()
-  console.log('Analyzing text:', text)
   const response = await ollama.chat({
     model: OLLAMA_MODEL,
-    messages: [{ role: 'user', content: `Analyze the following text for harmful or wrong content: ${text}` }],
+    messages: [
+      { 
+        role: 'user',
+        content: `Analyze the following text for harmful or wrong content: ${text}. Please provide both a sentiment (either 'ok' or 'dangerous') and a correction with info why is it ok or dangerous. Make sure, hte correction has not more than 255 characters in total.` }],
     format: zodToJsonSchema(TextAnalysisResult),
   })
   console.log('Analysis done')
