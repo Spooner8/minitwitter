@@ -5,4 +5,6 @@ export default interface IPost {
     updated_at: Date | null;
     deleted_at: Date | null;
     userId: number;
+
+    sentiment?: string; 
 }
