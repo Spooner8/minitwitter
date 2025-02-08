@@ -1,29 +1,65 @@
 <template>
-  <div
-    class="post-card bg-gray-800 shadow overflow-hidden rounded-lg max-w-72 min-w-72 m-4 flex flex-col justify-between">
+  <div class="post-card bg-gray-800 shadow overflow-hidden rounded-lg max-w-72 min-w-72 m-4 flex flex-col justify-between">
     <div class="flex flex-col flex-grow px-6 pt-6">
-      <div class="flex flex-row justify-between">
+      <div class="flex flex-row justify-between items-center">
         <h1 class="text-lg font-bold text-gray-300">#{{ username }}</h1>
-        <button v-if="isOwner" class="text-gray-500 hover:text-blue-500" @click="changeEditMode">
-          <Icon class="editPostIcon" name="lucide:square-pen" size="24" />
-        </button>
+        <div>
+          <button
+            v-if="isOwner"
+            class="text-gray-500 hover:text-blue-500"
+            @click="changeEditMode">
+            <Icon class="editPostIcon" name="lucide:square-pen" size="24" />
+          </button>
+          <button
+            v-else-if="post.sentiment === 'dangerous'"
+            @click="showDangerous = !showDangerous"
+            class="text-gray-500 hover:text-red-500">
+            <Icon v-if="!showDangerous" name="lucide:eye" size="24" />
+            <Icon v-else name="lucide:eye-off" size="24" />
+          </button>
+        </div>
       </div>
-      <hr class="mt-2 mb-2 border-gray-500">
-      <p v-if="!editMode" class="mt-1 max-w-2xl text-gray-300 flex-grow py-4">{{ content }}</p>
-      <textarea v-if="editMode" class="bg-gray-700 text-gray-300 flex-grow my-4 p-2 rounded"
-        rows="12" v-model="modifiedContent">{{ content }}</textarea>
-      <hr class="mt-2 mb-2 border-gray-500">
+      <hr class="mt-2 mb-2 border-gray-500" />
+      <p
+        v-if="!editMode"
+        class="mt-1 max-w-2xl text-gray-300 flex-grow py-4 transition"
+        :class="{ 'blur-md pointer-events-none': isBlurred }">
+        {{ content }}
+      </p>
+      <textarea
+        v-if="editMode"
+        class="bg-gray-700 text-gray-300 flex-grow my-4 p-2 rounded"
+        rows="12"
+        v-model="modifiedContent"
+      >
+        {{ content }}
+      </textarea>
+      <hr class="mt-2 mb-2 border-gray-500" />
     </div>
     <div class="flex flex-row justify-between px-4">
       <div :class="{ 'invisible': !editMode }" class="flex flex-row ps-2">
-        <button class="text-gray-500 hover:text-green-700 me-4" @click="savePost">
+        <button
+          class="text-gray-500 hover:text-green-700 me-4"
+          @click="savePost"
+        >
           <Icon class="editPostIcon" name="lucide:save" size="24" />
         </button>
-        <button class="text-gray-500 hover:text-red-500" @click="deletePost">
+        <button
+          class="text-gray-500 hover:text-red-500"
+          @click="deletePost"
+        >
           <Icon class="editPostIcon" name="lucide:trash-2" size="24" />
         </button>
       </div>
-      <p class="m-4 text-sm text-gray-500 self-end">{{ updated_at ?? created_at }}</p>
+      <p class="m-4 text-sm text-gray-500 self-end">
+        <span
+          v-if="post.sentiment === 'dangerous'"
+          class="text-yellow-400 mr-2 -ml-11"
+        >
+          dangerus
+        </span>
+        {{ updated_at ?? created_at }}
+      </p>
     </div>
   </div>
 </template>
@@ -82,6 +118,15 @@ const changeEditMode = () => {
   editMode.value = !editMode.value;
   modifiedContent.value = content;
 }
+const showDangerous = ref(false);
+
+const isBlurred = computed(() => {
+  return (
+    !isOwner.value &&
+    props.post.sentiment === 'dangerous' &&
+    !showDangerous.value
+  );
+});
 
 const deletePost = async () => {
   const answer = confirm('Are you sure you want to delete this post?');
