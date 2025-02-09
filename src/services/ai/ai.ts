@@ -33,16 +33,7 @@ export async function textAnalysis(text: string) {
     messages: [
       { 
         role: 'user',
-        content: `Analysiere den folgenden Text streng auf Hassrede (Hate Speech).  
-**Definition von Hassrede:**  
-- Jegliche Form von abwertender, hetzerischer, gewaltfördernder oder diskriminierender Sprache.  
-- Bezieht sich auf Merkmale wie Ethnizität, Religion, Geschlecht, Sexualität, Behinderung, Herkunft oder andere schützenswerte Gruppen.  
-- Inklusive direkter Beleidigungen, indirekter Andeutungen, Stereotype, Bedrohungen oder entmenschlichender Sprache.  
-
-**Anweisungen:**  
-1. Sei **maximal streng**: Auch subtile Anspielungen oder "versteckte" Hassrede (Dog Whistles) als positiv markieren.  
-2. Kontext ignorieren: Selbst ironisch/zitierte Aussagen gelten als Hassrede.  
-3. Sprachspezifische Nuancen in Deutsch/Englisch prüfen (z.B. deutsche Beleidigungen vs. englische Slang-Ausdrücke): ${text}. Please provide both a sentiment (either 'ok' or 'dangerous') and a correction with info why is it ok or dangerous. Make sure, hte correction has not more than 255 characters in total.` }],
+        content: `Analyze the following text for harmful or wrong content: ${text}. Please provide both a sentiment (either 'ok' or 'dangerous') and a correction with info why is it ok or dangerous. Make sure, hte correction has not more than 255 characters in total.` }],
     format: zodToJsonSchema(TextAnalysisResult),
   })
   console.log('Analysis done')
