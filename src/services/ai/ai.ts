@@ -33,7 +33,7 @@ export async function textAnalysis(text: string) {
     messages: [
       { 
         role: 'user',
-        content: `Analyze the following text for harmful or wrong content: ${text}. Please provide both a sentiment (either 'ok' or 'dangerous') and a correction with info why is it ok or dangerous. Make sure, hte correction has not more than 255 characters in total.` }],
+        content: `Analyze the following text for harmful or wrong content: ${text}. Please provide both a sentiment (either 'ok' or 'dangerous') and a correction with info why is it ok or dangerous. Make sure, hte correction has not more than 200 characters in total.` }],
     format: zodToJsonSchema(TextAnalysisResult),
   })
   console.log('Analysis done')
