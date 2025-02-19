@@ -6,6 +6,8 @@ import { textAnalysis } from '../services/ai/ai';
 let sentimentQueue: Queue;
 let sentimentWorker: Worker;
 
+const SERVER_ROLE = process.env.SERVER_ROLE || 'all';
+
 export const initializeMessageBroker = () => {
   const redisHost = process.env.REDIS_HOST || 'localhost';
   const redisPort = parseInt(process.env.REDIS_PORT || '6379');
@@ -17,9 +19,12 @@ export const initializeMessageBroker = () => {
   console.log(`Connecting to Redis at ${redisHost}:${redisPort}`);
 
   sentimentQueue = new Queue('sentiment', { connection });
-  sentimentWorker = new Worker('sentiment', analyzeSentiment, { connection });
+  console.log('Sentiment queue initialized');
 
-  console.log('Message broker initialized');
+  if (SERVER_ROLE === 'all' || SERVER_ROLE === 'worker') {
+    sentimentWorker = new Worker('sentiment', analyzeSentiment, { connection });
+    console.log('Message worker initialized');
+  }
 };
 
 const analyzeSentiment = async (job: Job) => {

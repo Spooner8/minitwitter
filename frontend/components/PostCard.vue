@@ -34,6 +34,14 @@
       >
         {{ content }}
       </textarea>
+      <textarea
+        v-if="post.correction && post.sentiment === 'dangerous'"
+        class="bg-gray-700 text-gray-300 flex-grow my-4 p-2 rounded"
+        rows="12"
+        readonly
+      >
+        {{ correction }}
+      </textarea>
       <hr class="mt-2 mb-2 border-gray-500" />
     </div>
     <div class="flex flex-row justify-between px-4">
@@ -78,7 +86,7 @@ const props = defineProps<{
 }>();
 
 const { api } = useApi();
-const { username, content, userId, id } = props.post;
+const { username, content, userId, id, correction } = props.post;
 const { currentUser, getCurrentUser } = useCurrentUser();
 const { getLocalDateTimeString } = useLocalDateTimeFormatter();
 const created_at = computed(() => getLocalDateTimeString(new Date(props.post.created_at)));
