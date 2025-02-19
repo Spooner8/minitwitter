@@ -4,6 +4,7 @@ import { postService } from '../services/crud/posts.ts';
 import { isUser, isOwner } from '../middleware/auth.ts';
 import { authService } from '../services/auth/auth.ts';
 import { sentimentQueue } from '../message-broker/index.ts';
+import { invalidatePostsCache } from '../services/cache/cache.ts';
 
 const router = Router();
 
@@ -36,6 +37,7 @@ router.post('/api/posts', isUser, async (req: Request, res: Response) => {
         } else {
             const postId = response[0].id;
             await sentimentQueue.add('analyzeSentiment', { postId });
+            await invalidatePostsCache();
             res.status(201).send(response);
         }
     } catch (error: any) {
@@ -71,6 +73,7 @@ router.put('/api/posts/:id', isOwner, async (req: Request, res: Response) => {
         } else {
             const postId = response[0].id;
             await sentimentQueue.add('analyzeSentiment', { postId });
+            await invalidatePostsCache();
             res.status(200).send({ message: 'success', updated_post: response });
         }
     } catch (error: any) {
@@ -86,6 +89,7 @@ router.delete('/api/posts/:id', isOwner, async (req: Request, res: Response) => 
         if (!response) {
             res.status(404).send({ message: 'Post not found' });
         } else {
+            await invalidatePostsCache();
             res.status(200).send({ 'Post deleted': response });
         }
     } catch (error: any) {
