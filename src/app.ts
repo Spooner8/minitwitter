@@ -11,10 +11,10 @@ if (!allowedRoles.includes(SERVER_ROLE)) {
 }
 
 initializeMessageBroker();
+await initializeOllama();
 
 if (SERVER_ROLE === 'all' || SERVER_ROLE === 'api') {
     const app = express();
     
     initializeAPI(app);
-    await initializeOllama();
 }
