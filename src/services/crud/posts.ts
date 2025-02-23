@@ -2,6 +2,7 @@ import { postsTable } from '../../schemas';
 import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
 import { ollama, OLLAMA_MODEL } from '../ai/ai.ts';
+import { getPosts as getCachedPosts, invalidatePostsCache } from '../cache/cache';
 
 export const postService = {
     getPosts,
@@ -13,8 +14,9 @@ export const postService = {
 };
 
 async function getPosts() {
-    return await db.select().from(postsTable);
-}
+    // Hier wird die Cache-Logik verwendet
+    return await getCachedPosts();
+  }
 
 async function getPostById(id: number) {
     return (await db.select().from(postsTable).where(eq(postsTable.id, id)))[0];
@@ -25,8 +27,10 @@ async function createPost(userId: number, content: string) {
         userId: userId,
         content: content,
     };
-
-    return await db.insert(postsTable).values(post).returning();
+    const result = await db.insert(postsTable).values(post).returning();
+  // Cache invalidieren, damit beim nächsten Lesen aktuelle Daten abgerufen werden
+  await invalidatePostsCache();
+  return result;
 }
 
 async function generatePost() {
@@ -45,16 +49,25 @@ async function generatePost() {
 }
 
 async function updatePost(id: number, updates: Partial<typeof postsTable.$inferInsert>) {
-    return await db
-        .update(postsTable)
-        .set({
-            ...updates,
-            updated_at: new Date(),
-        })
-        .where(eq(postsTable.id, id))
-        .returning();
-}
+    const result = await db
+      .update(postsTable)
+      .set({
+        ...updates,
+        updated_at: new Date(),
+      })
+      .where(eq(postsTable.id, id))
+      .returning();
+    await invalidatePostsCache();
+    return result;
+  }
 
 async function deletePost(id: number) {
-    return await db.update(postsTable).set({ deleted_at: new Date() }).where(eq(postsTable.id, id)).returning();
-}
+    const result = await db
+      .update(postsTable)
+      .set({ deleted_at: new Date() })
+      .where(eq(postsTable.id, id))
+      .returning();
+    await invalidatePostsCache();
+    return result;
+  }
+

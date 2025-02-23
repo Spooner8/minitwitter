@@ -12,7 +12,7 @@ export const initializeCache = async () => {
   console.log('Initializing Redis Cache...');
   redis = new IORedis({
     host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT || '6379', 10),
+    port: parseInt(process.env.REDIS_PORT || '6379'),
     maxRetriesPerRequest: null,
   });
   console.log('Redis Cache initialized');
@@ -46,7 +46,7 @@ export const getPosts = async (userId?: number): Promise<Posts> => {
 };
 
 // Funktion, um alle Posts aus dem Redis-Cache zu holen
-const getPostsFromCache = async (): Promise<Posts | null> => {
+export const getPostsFromCache = async (): Promise<Posts | null> => {
   if (!redis) return null;
   const cachedPosts = await redis.get('posts');
   if (!cachedPosts) return null;
