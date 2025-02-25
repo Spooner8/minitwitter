@@ -11,6 +11,7 @@ export const userService = {
     deleteUser,
 };
 
+// Function to create a new user
 async function createUser(username: string, password: string) {
     const salt = await bcrypt.genSalt(10);
 
@@ -25,10 +26,12 @@ async function createUser(username: string, password: string) {
         .returning({ id: usersTable.id, username: usersTable.username });
 }
 
+// Function to get all users
 async function getUsers() {
     return await db.select({id: usersTable.id, username: usersTable.username}).from(usersTable);
 }
 
+// Function to get a user by ID
 async function getUserById(id: number) {
     return (
         await db
@@ -38,6 +41,7 @@ async function getUserById(id: number) {
     )[0];
 }
 
+// Function to update a user
 async function updateUser(id: number, username: string, password: string) {
     const salt = await bcrypt.genSalt(10);
 
@@ -50,6 +54,7 @@ async function updateUser(id: number, username: string, password: string) {
         .where(eq(usersTable.id, id));
 }
 
+// Function to delete a user
 async function deleteUser(id: number) {
     return await db.delete(usersTable).where(eq(usersTable.id, id));
 }

@@ -9,6 +9,7 @@ export const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2:1b'
 
 export let ollama: Ollama
 
+// Function to initialize the Ollama instance
 export const initializeOllama = async () => {
   if (ollama) return
   console.log('Initializing Ollama...')
@@ -22,18 +23,20 @@ export const initializeOllama = async () => {
   await ollama.pull({ model: OLLAMA_MODEL })
 }
 
+// Define the schema for text analysis result
 const TextAnalysisResult = z.object({
   sentiment: z.enum(['ok', 'dangerous']),
   correction: z.string(),
 })
 
+// Function to analyze the sentiment of a given text
 export async function textAnalysis(text: string) {
   const response = await ollama.chat({
     model: OLLAMA_MODEL,
     messages: [
       { 
         role: 'user',
-        content: `Analyze the following text for harmful or wrong content: ${text}. Please provide both a sentiment (either 'ok' or 'dangerous') and a correction with info why is it ok or dangerous. Make sure, hte correction has not more than 255 characters in total.` }],
+        content: `Analyze the following text for harmful or wrong content: ${text}. Please provide both a sentiment (either 'ok' or 'dangerous') and a correction with info why is it ok or dangerous. Make sure, the correction has not more than 255 characters in total.` }],
     format: zodToJsonSchema(TextAnalysisResult),
   })
   console.log('Analysis done')

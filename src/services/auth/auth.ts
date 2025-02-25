@@ -28,9 +28,11 @@ export const authService = {
     getCurrentUser,
 };
 
+// Function to handle user login
 async function login(username: string, password: string, res: Response) {
     const token = await verifyUser(username, password);
     if (token) {
+        // Set JWT token in cookies
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         res.status(200).send({ message: 'User logged in' });
     } else {
@@ -38,6 +40,7 @@ async function login(username: string, password: string, res: Response) {
     }
 }
 
+// Function to verify user credentials and generate JWT token
 async function verifyUser(username: string, password: string) {
     const user = await db
         .select()
@@ -50,6 +53,7 @@ async function verifyUser(username: string, password: string) {
     return isPasswordValid ? createJwtToken(user[0]) : null;
 }
 
+// Function to create JWT token
 function createJwtToken(user: UserPayload) {
     const payload: UserPayload = {
         id: user.id,
@@ -60,6 +64,7 @@ function createJwtToken(user: UserPayload) {
     return jwt.sign(payload, JWT_SECRET, options);
 }
 
+// Function to get the current user from the JWT token
 async function getCurrentUser(req: Request, res: Response): Promise<UserPayload | null> {
     try {
         const token = req.cookies?.jwt;
@@ -81,7 +86,9 @@ async function getCurrentUser(req: Request, res: Response): Promise<UserPayload 
     }
 }
 
+// Function to handle user logout
 function logout(res: Response) {
+    // Clear the JWT token from cookies
     res.cookie('jwt', '', { httpOnly: true, maxAge: 1 });
     res.status(200).send({ message: 'User logged out' });
 }
