@@ -2,6 +2,7 @@ import express from 'express';
 import { initializeAPI } from './services/api.ts';
 import { initializeMessageBroker } from './message-broker/index.ts';
 import { initializeOllama } from './services/ai/ai.ts';
+import { initializeCache } from './services/cache/cache.ts';
 
 const SERVER_ROLE = process.env.SERVER_ROLE || 'all';
 const allowedRoles = ['all', 'api', 'worker'];
@@ -15,6 +16,6 @@ await initializeOllama();
 
 if (SERVER_ROLE === 'all' || SERVER_ROLE === 'api') {
     const app = express();
-    
+    await initializeCache();
     initializeAPI(app);
 }
