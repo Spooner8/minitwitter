@@ -6,6 +6,7 @@
         "@types/bun": "latest",
         "@types/cookie": "^0.6.0",
         "@types/cookie-parser": "^1.4.8",
+        "@types/k6": "^0.57.1",
         "@types/pg": "^8.11.10",
         "@types/vue": "^1.0.31",
         "drizzle-kit": "^0.28.1",
