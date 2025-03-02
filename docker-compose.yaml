@@ -35,7 +35,9 @@ services:
             DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
             OLLAMA_BASE_URL: http://ollama-1:11434
             REDIS_HOST: redis
+            REDIS_PORT: 6379
             SERVER_ROLE: api
+            CACHE_ACTIVE: true
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
@@ -53,7 +55,9 @@ services:
             DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
             OLLAMA_BASE_URL: http://ollama-1:11434
             REDIS_HOST: redis
+            REDIS_PORT: 6379
             SERVER_ROLE: api
+            CACHE_ACTIVE: true
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
