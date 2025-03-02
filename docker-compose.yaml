@@ -36,6 +36,7 @@ services:
             OLLAMA_BASE_URL: http://ollama-1:11434
             REDIS_HOST: redis
             SERVER_ROLE: api
+            CACHE_ACTIVE: "true"
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
@@ -54,6 +55,7 @@ services:
             OLLAMA_BASE_URL: http://ollama-1:11434
             REDIS_HOST: redis
             SERVER_ROLE: api
+            CACHE_ACTIVE: "true"
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
@@ -72,6 +74,7 @@ services:
             OLLAMA_BASE_URL: http://ollama-1:11434
             REDIS_HOST: redis
             SERVER_ROLE: worker
+            CACHE_ACTIVE: "true"
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
