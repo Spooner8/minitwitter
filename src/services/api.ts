@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import { limiter } from '../middleware/rate-limiter.ts';
 
 const PORT = process.env.API_PORT || 3000;
 
@@ -25,6 +26,8 @@ export const initializeAPI = (app: Express) => {
     app.use(bodyParser.json());
     app.use(cookieParser());
     app.use(cors(corsOptions));
+
+    app.use(limiter);
 
     // Router
     app.use(postsRouter);
