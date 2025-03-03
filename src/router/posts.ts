@@ -5,8 +5,11 @@ import { isUser, isOwner } from '../middleware/auth.ts';
 import { authService } from '../services/auth/auth.ts';
 import { sentimentQueue } from '../message-broker/index.ts';
 import { getPosts, invalidatePostsCache } from '../services/cache/cache.ts';
+import { limiter } from '../middleware/rate-limiter.ts';
 
 const router = Router();
+
+router.use(limiter);
 
 //router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
 router.get('/api/posts', async (_req: Request, res: Response) => {
