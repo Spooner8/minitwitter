@@ -2,7 +2,7 @@ import { postsTable } from '../../schemas';
 import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
 import { ollama, OLLAMA_MODEL } from '../ai/ai.ts';
-
+ 
 export const postService = {
     getPosts,
     getPostById,
@@ -28,7 +28,7 @@ async function createPost(userId: number, content: string) {
         userId: userId,
         content: content,
     };
-
+ 
     return await db.insert(postsTable).values(post).returning();
 }
 
@@ -44,7 +44,7 @@ async function generatePost() {
             },
         ],
     });
-
+ 
     return content.message.content;
 }
 

@@ -35,6 +35,8 @@ services:
             DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
             OLLAMA_BASE_URL: http://ollama-1:11434
             REDIS_HOST: redis
+            SERVER_ROLE: api
+            CACHE_ACTIVE: "true"
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
@@ -52,6 +54,27 @@ services:
             DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
             OLLAMA_BASE_URL: http://ollama-1:11434
             REDIS_HOST: redis
+            SERVER_ROLE: api
+            CACHE_ACTIVE: "true"
+        depends_on:
+            - db
+        command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
+        networks:
+            - minitwitter
+        restart: always
+
+    minitwitter-worker:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: minitwitter-worker
+        image: spoonersl/minitwitter
+        environment:
+            DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
+            OLLAMA_BASE_URL: http://ollama-1:11434
+            REDIS_HOST: redis
+            SERVER_ROLE: worker
+            CACHE_ACTIVE: "true"
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
@@ -89,7 +112,7 @@ services:
             - '6379:6379'
             - '8001:8001'
         healthcheck:
-            test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+            test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
         networks:
             - minitwitter
         restart: always
