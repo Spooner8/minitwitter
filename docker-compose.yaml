@@ -1,4 +1,5 @@
 name: minitwitter
+
 services:
     loadbalancer:
         image: nginx
@@ -7,6 +8,26 @@ services:
             - ./nginx.conf:/etc/nginx/nginx.conf:ro
         ports:
             - '80:80'
+        restart: always
+        networks:
+            - minitwitter
+
+    prometheus:
+        image: prom/prometheus
+        container_name: prometheus
+        volumes:
+            - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+        ports:
+            - '9090:9090'
+        restart: always
+        networks:
+            - minitwitter
+
+    grafana:
+        image: grafana/grafana
+        container_name: grafana
+        ports:
+            - '3100:3000'
         restart: always
         networks:
             - minitwitter
@@ -38,6 +59,8 @@ services:
             SERVER_ROLE: api
             CACHE_ACTIVE: true
             RATE_LIMITER: true
+            LOG_LEVEL: info
+            PACKAGE_MANAGER: npm
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
@@ -58,6 +81,8 @@ services:
             SERVER_ROLE: api
             CACHE_ACTIVE: true
             RATE_LIMITER: true
+            LOG_LEVEL: info
+            PACKAGE_MANAGER: npm
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
