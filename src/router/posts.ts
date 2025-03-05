@@ -6,6 +6,7 @@ import { authService } from '../services/auth/auth.ts';
 import { sentimentQueue } from '../message-broker/index.ts';
 import { getPosts, invalidatePostsCache } from '../services/cache/cache.ts';
 import { limiter } from '../middleware/rate-limiter.ts';
+import { logger } from '../services/logger.ts';
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.get('/api/posts', async (_req: Request, res: Response) => {
             res.status(200).send(posts);
         }
     } catch (error: any) {
-        console.log(error);
+        logger.info(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -49,7 +50,7 @@ router.post('/api/posts', isUser, async (req: Request, res: Response) => {
         }
         await invalidatePostsCache();
     } catch (error: any) {
-        console.log(error);
+        logger.info(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -67,7 +68,7 @@ router.get(
                 res.status(201).send({ content: response });
             }
         } catch (error: any) {
-            console.log(error);
+            logger.info(error);
             res.status(400).send({ message: error.message });
         }
     }
@@ -92,7 +93,7 @@ router.put('/api/posts/:id', isOwner, async (req: Request, res: Response) => {
         }
         await invalidatePostsCache();
     } catch (error: any) {
-        console.log(error);
+        logger.info(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -111,7 +112,7 @@ router.delete(
             }
             await invalidatePostsCache();
         } catch (error: any) {
-            console.log(error);
+            logger.info(error);
             res.status(400).send({ message: error.message });
         }
     }

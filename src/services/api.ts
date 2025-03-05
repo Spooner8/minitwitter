@@ -3,8 +3,12 @@ import bodyParser from 'body-parser';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import { httpLogger } from '../services/logger.ts';
+import { logger } from '../services/logger.ts';
 
 const PORT = process.env.API_PORT || 3000;
+
+
 
 // Routers
 import postsRouter from '../router/posts.ts';
@@ -21,7 +25,7 @@ export const initializeAPI = (app: Express) => {
         origin: allowedOrigins,
         credentials: true,
     };
-
+    app.use(httpLogger);
     app.use(bodyParser.json());
     app.use(cookieParser());
     app.use(cors(corsOptions));
@@ -32,6 +36,6 @@ export const initializeAPI = (app: Express) => {
     app.use(userRouter);
 
     app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
+        logger.info(`Server is running on port ${PORT}`);
     });
 };

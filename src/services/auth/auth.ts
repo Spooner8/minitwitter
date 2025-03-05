@@ -5,6 +5,7 @@ import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { logger } from '../logger.ts';
 
 interface UserPayload {
     id: number;
@@ -76,7 +77,7 @@ async function getCurrentUser(req: Request, res: Response): Promise<UserPayload 
             return null;
         }
     } catch (error: any) {
-        console.log(error);
+        logger.info(error);
         return null;
     }
 }

@@ -11,14 +11,14 @@ export let ollama: Ollama
 
 export const initializeOllama = async () => {
   if (ollama) return
-  console.log('Initializing Ollama...')
+  logger.info('Initializing Ollama...')
   const OLLAMA_HOST = process.env.OLLAMA_BASE_URL || 'http://localhost:11434'
-  console.log('Initializing Ollama with model:', OLLAMA_MODEL)
-  console.log('Using Ollama host:', OLLAMA_HOST)
+  logger.info('Initializing Ollama with model:', OLLAMA_MODEL)
+  logger.info('Using Ollama host:', OLLAMA_HOST)
   ollama = new Ollama({
     host: OLLAMA_HOST,
   })
-  console.log('Pulling model from server... This can take a few minutes')
+  logger.info('Pulling model from server... This can take a few minutes')
   await ollama.pull({ model: OLLAMA_MODEL })
 }
 
@@ -36,6 +36,6 @@ export async function textAnalysis(text: string) {
         content: `Analyze the following text for harmful or wrong content: ${text}. Please provide both a sentiment (either 'ok' or 'dangerous') and a correction with info why is it ok or dangerous. Make sure, hte correction has not more than 200 characters in total.` }],
     format: zodToJsonSchema(TextAnalysisResult),
   })
-  console.log('Analysis done')
+  logger.info('Analysis done')
   return JSON.parse(response.message.content) as z.infer<typeof TextAnalysisResult>
 }

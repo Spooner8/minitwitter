@@ -17,7 +17,7 @@ router.post('/api/auth/login', async (req: Request, res: Response) => {
             res.status(200).send(response);
         }
     } catch (error: any) {
-        console.log(error);
+        logger.info(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -26,7 +26,7 @@ router.get('/api/auth/logout', (_req: Request, res: Response) => {
     try {
         authService.logout(res);
     } catch (error: any) {
-        console.log(error);
+        logger.info(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -40,7 +40,7 @@ router.get('/api/auth/loginstatus', async (req: Request, res: Response) => {
         res.status(200).json({ isLoggedIn: false });
     }
     } catch (error: any) {
-        console.log(error);
+        logger.info(error);
         res.status(400).send({ message: error.message });
     }
 });
