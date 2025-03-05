@@ -8,7 +8,8 @@ import { getPosts, invalidatePostsCache } from '../services/cache/cache.ts';
 
 const router = Router();
 
-router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
+router.get('/api/posts', async (_req: Request, res: Response) => {
+// router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
     try {
         // const posts = await postService.getPosts();
         const posts = await getPosts();
