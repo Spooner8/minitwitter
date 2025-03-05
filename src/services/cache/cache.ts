@@ -1,9 +1,6 @@
-import { desc, eq } from 'drizzle-orm';
-import { db } from '../database';
-import { postsTable, usersTable } from '../../schemas';
+import { postsTable } from '../../schemas';
 import IORedis from 'ioredis';
 import { postService } from '../crud/posts';
-import type { infer, TypeOf } from 'zod';
 
 const CACHE_ACTIVE = (process.env.CACHE_ACTIVE || 'true') === 'true';
 
@@ -22,11 +19,10 @@ export const initializeCache = async () => {
 
 type Posts = Awaited<ReturnType<typeof getPostsFromDB>>;
 
-export const getPosts = async (userId?: number) => {
+export const getPosts = async () => {
     if (CACHE_ACTIVE && redis) {
         const posts = await getPostsFromCache();
         console.log('Posts retrieved from cache.');
-        console.log('Posts:', posts);
         if (posts) return posts;
     }
 
@@ -37,9 +33,6 @@ export const getPosts = async (userId?: number) => {
         console.log('Posts stored in cache.');
     }
     return posts;
-
-    // 4. Filtere Posts nach userId (falls angegeben) und schließe Posts mit sentiment "dangerous" aus
-    // 5. Rückgabe der gefilterten Posts
 };
 
 const getPostsFromCache = async (): Promise<Posts | null> => {
