@@ -50,6 +50,6 @@
     },
     "scripts": {
         "dev": "bun --watch ./src/app.ts",
-        "prod-bun": "bun ./src/app.ts"
+        "prod": "bun ./src/app.ts"
     }
 }
