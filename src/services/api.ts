@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { httpLogger } from '../services/logger.ts';
 import { logger } from '../services/logger.ts';
+import promMid from 'express-prometheus-middleware';
 
 const PORT = process.env.API_PORT || 3000;
 
@@ -25,6 +26,15 @@ export const initializeAPI = (app: Express) => {
         origin: allowedOrigins,
         credentials: true,
     };
+    app.use(
+        promMid({
+          metricsPath: '/metrics',
+          collectDefaultMetrics: false, // Wichtig, damit nicht alle Default-Metriken gesammelt werden
+          requestDurationBuckets: [0.1, 0.5, 1, 1.5],
+          requestLengthBuckets: [512, 1024, 5120, 10240, 51200, 102400],
+          responseLengthBuckets: [512, 1024, 5120, 10240, 51200, 102400],
+        })
+      );
     app.use(httpLogger);
     app.use(bodyParser.json());
     app.use(cookieParser());
