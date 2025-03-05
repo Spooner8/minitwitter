@@ -5,6 +5,7 @@ import { db } from '../database.ts';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { logger } from '../log/logger.ts';
 
 interface UserPayload {
     id: number;
@@ -60,7 +61,10 @@ function createJwtToken(user: UserPayload) {
     return jwt.sign(payload, JWT_SECRET, options);
 }
 
-async function getCurrentUser(req: Request, res: Response): Promise<UserPayload | null> {
+async function getCurrentUser(
+    req: Request,
+    res: Response
+): Promise<UserPayload | null> {
     try {
         const token = req.cookies?.jwt;
         if (!token) {
@@ -76,7 +80,7 @@ async function getCurrentUser(req: Request, res: Response): Promise<UserPayload 
             return null;
         }
     } catch (error: any) {
-        console.log(error);
+        logger.error(error);
         return null;
     }
 }

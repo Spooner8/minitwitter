@@ -18,7 +18,7 @@ router.post('/api/user/signup', async (req: Request, res: Response) => {
             res.status(201).send({ 'User created': response });
         }
     } catch (error: any) {
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -32,7 +32,7 @@ router.get('/api/user', async (_req: Request, res: Response) => {
             res.status(200).send(users);
         }
     } catch (error: any) {
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -47,7 +47,7 @@ router.get('/api/user/:id', async (req: Request, res: Response) => {
             res.status(200).send(user);
         }
     } catch (error: any) {
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -66,7 +66,7 @@ router.put('/api/user/:id', isOwner, async (req: Request, res: Response) => {
             res.status(200).send({ 'User updated': response });
         }
     } catch (error: any) {
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -81,7 +81,7 @@ router.delete('/api/user/:id', isOwner, async (req: Request, res: Response) => {
             res.status(200).send({ 'User deleted': response });
         }
     } catch (error: any) {
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });

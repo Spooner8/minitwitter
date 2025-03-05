@@ -5,13 +5,13 @@ import { isUser, isOwner } from '../middleware/auth.ts';
 import { authService } from '../services/auth/auth.ts';
 import { sentimentQueue } from '../message-broker/index.ts';
 import { getPosts, invalidatePostsCache } from '../services/cache/cache.ts';
+import { logger } from '../services/log/logger.ts';
 
 const router = Router();
 
 router.get('/api/posts', async (_req: Request, res: Response) => {
-// router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
+    // router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
     try {
-        // const posts = await postService.getPosts();
         const posts = await getPosts();
         if (!posts) {
             res.status(404).send({ message: 'Posts not found' });
@@ -19,7 +19,7 @@ router.get('/api/posts', async (_req: Request, res: Response) => {
             res.status(200).send(posts);
         }
     } catch (error: any) {
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -46,7 +46,7 @@ router.post('/api/posts', isUser, async (req: Request, res: Response) => {
         }
         await invalidatePostsCache();
     } catch (error: any) {
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -64,7 +64,7 @@ router.get(
                 res.status(201).send({ content: response });
             }
         } catch (error: any) {
-            console.log(error);
+            logger.error(error);
             res.status(400).send({ message: error.message });
         }
     }
@@ -89,7 +89,7 @@ router.put('/api/posts/:id', isOwner, async (req: Request, res: Response) => {
         }
         await invalidatePostsCache();
     } catch (error: any) {
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -108,7 +108,7 @@ router.delete(
             }
             await invalidatePostsCache();
         } catch (error: any) {
-            console.log(error);
+            logger.error(error);
             res.status(400).send({ message: error.message });
         }
     }

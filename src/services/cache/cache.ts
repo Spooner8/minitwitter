@@ -1,6 +1,7 @@
 import { postsTable } from '../../schemas';
 import IORedis from 'ioredis';
 import { postService } from '../crud/posts';
+import { logger } from '../log/logger';
 
 const CACHE_ACTIVE = (process.env.CACHE_ACTIVE || 'true') === 'true';
 
@@ -8,13 +9,13 @@ let redis: IORedis;
 
 export const initializeCache = async () => {
     if (redis || !CACHE_ACTIVE) return;
-    console.log('Initializing Redis Cache...');
+    logger.info('Initializing Redis Cache...');
     redis = new IORedis({
         host: process.env.REDIS_HOST || 'localhost',
         port: parseInt(process.env.REDIS_PORT || '6379'),
         maxRetriesPerRequest: null,
     });
-    console.log('Redis Cache initialized');
+    logger.info('Redis Cache initialized');
 };
 
 type Posts = Awaited<ReturnType<typeof getPostsFromDB>>;
@@ -22,15 +23,15 @@ type Posts = Awaited<ReturnType<typeof getPostsFromDB>>;
 export const getPosts = async () => {
     if (CACHE_ACTIVE && redis) {
         const posts = await getPostsFromCache();
-        console.log('Posts retrieved from cache.');
+        logger.info('Posts retrieved from cache.');
         if (posts) return posts;
     }
 
     const posts = await getPostsFromDB();
-    console.log('Posts retrieved from database.');
+    logger.info('Posts retrieved from database.');
     if (CACHE_ACTIVE && redis) {
         await setPostsInCache(posts);
-        console.log('Posts stored in cache.');
+        logger.info('Posts stored in cache.');
     }
     return posts;
 };
@@ -67,7 +68,7 @@ export const invalidatePostsCache = async () => {
     if (!redis) return;
     try {
         await redis.del('posts');
-        console.log('Posts cache invalidated.');
+        logger.info('Posts cache invalidated.');
     } catch (error) {
         console.error('Error invalidating posts cache:', error);
     }
