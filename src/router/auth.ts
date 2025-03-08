@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { authService } from '../services/auth/auth.ts';
+import { logger } from '../services/logger';
 
 const router = Router();
 

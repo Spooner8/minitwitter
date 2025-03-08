@@ -12,8 +12,9 @@ const router = Router();
 
 router.use(limiter);
 
-//router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
-router.get('/api/posts', async (_req: Request, res: Response) => {
+
+router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
+//router.get('/api/posts', async (_req: Request, res: Response) => {
     try {
         // const posts = await postService.getPosts();
         const posts = await getPosts();

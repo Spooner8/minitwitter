@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { userService } from '../services/crud/user.ts';
 import { isOwner } from '../middleware/auth.ts';
+import { logger } from '../services/logger';
 
 const router = Router();
 
