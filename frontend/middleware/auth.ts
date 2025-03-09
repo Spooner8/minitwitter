@@ -1,5 +1,10 @@
+/**
+ * @description
+ * This middleware checks if the user is logged in by making a request to the server.  
+ * If the user is not logged in, it redirects them to the login-required page.
+ */
 export default defineNuxtRouteMiddleware(async () => {
-  const { api } = useApi();
+  const api = useApi();
 
   try {
     const response = await api.get('/api/auth/loginstatus');

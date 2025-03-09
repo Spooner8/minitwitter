@@ -22,7 +22,7 @@
 <script setup lang="ts">
     import { ref } from 'vue'
 
-    const { api } = useApi();
+    const api = useApi();
 
     definePageMeta({
         layout: 'default',

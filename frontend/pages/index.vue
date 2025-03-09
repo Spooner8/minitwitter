@@ -41,12 +41,13 @@ interface IUser {
     username: string;
 }
 
-const { api } = useApi();
+const api = useApi();
 const postsWithUsernames = ref<(IPost & { username: string })[]>([]);
 const { data: posts } = await api.get<IPost[]>('/api/posts');
 
 if (posts && posts.length > 0) {
-    for (const post of posts) {
+    const activePosts = posts.filter((post) => post.deleted_at === null || post.deleted_at === undefined);
+    for (const post of activePosts) {
         const { data: user } = await api.get<IUser>(`/api/user/${post.userId}`);
         if (user) {
             postsWithUsernames.value.push({

@@ -2,6 +2,13 @@ import type { Request, Response, NextFunction } from 'express';
 import { authService } from '../services/auth/auth.ts';
 import { postService } from '../services/crud/posts.ts';
 
+/**
+ * @description Middleware to check if user is authenticated
+ * 
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next 
+ */
 export const isUser = async (
     req: Request,
     res: Response,
@@ -19,6 +26,13 @@ export const isUser = async (
     }
 };
 
+/**
+ * @description Middleware to check if user is the owner of a post
+ * 
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
 export const isOwner = async (
     req: Request,
     res: Response,
