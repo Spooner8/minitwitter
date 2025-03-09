@@ -63,7 +63,7 @@
   import { onMounted } from 'vue'
 
   const route = useRoute();
-  const { api } = useApi();
+  const api = useApi();
   const { currentUser, getCurrentUser } = useCurrentUser();
 
   const navigation = [

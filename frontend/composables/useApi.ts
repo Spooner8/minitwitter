@@ -1,6 +1,13 @@
-import axios from 'axios'
+import axios, { type AxiosInstance } from 'axios'
 
-export const useApi = () => {
+/**
+ * @description
+ * This composable is responsible for creating an axios instance with the base URL of the API.  
+ * It uses the runtime config to get the API base URL.  
+ * 
+ * @returns {Object} - The axios instance.
+ */
+export const useApi = (): AxiosInstance => {
     const config = useRuntimeConfig()
     const apiBaseUrl = config.public.apiBaseUrl
 
@@ -9,5 +16,5 @@ export const useApi = () => {
         withCredentials: true,
     })
 
-    return { api }
+    return api
 }

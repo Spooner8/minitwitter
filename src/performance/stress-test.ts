@@ -1,17 +1,23 @@
-// import necessary modules
+/**
+ * This function will be called by k6 when the test is run
+ * It will make a GET request to the /api/posts endpoint
+ * It will check that the response code is 200
+ */
+
 import { check } from 'k6'
 import http from 'k6/http'
 
-// define configuration
+/**
+ * @description  
+ * Stress test options for the /api/posts endpoint  
+ * Stages are defined to ramp up the number of virtual users from 10 to 2000 over 3 minutes  
+ * Thresholds are defined to ensure that the error rate is less than 1% and 99% of requests are below 1s  
+ */
 export const options = {
-  // define thresholds
   thresholds: {
-    // http errors should be less than 1%
     http_req_failed: [{ threshold: 'rate<0.01', abortOnFail: true }],
-    // 99% of requests should be below 1s
     http_req_duration: [{ threshold: 'p(99)<1000', abortOnFail: true }],
   },
-  // define scenarios
   scenarios: {
     breaking: {
       executor: 'ramping-vus',
@@ -30,13 +36,9 @@ export const options = {
 }
 
 export default function () {
-  // define URL for posts
   const url = 'http://localhost:80/api/posts'
-
-  // send a get request and save response
   const res = http.get(url)
 
-  // check that response is 200
   check(res, {
     'response code was 200': (res) => res.status == 200,
   })

@@ -8,16 +8,26 @@ let sentimentQueue: Queue;
 let sentimentWorker: Worker;
 
 const SERVER_ROLE = process.env.SERVER_ROLE || 'all';
+const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
+const REDIS_PORT = parseInt(process.env.REDIS_PORT || '6379');
 
+/**
+ * @description
+ * Initialize message broker with Redis connection.  
+ * If the server role is 'all' or 'worker', a worker is created to process sentiment analysis jobs.
+ * 
+ * Environment variables:
+ * @env REDIS_HOST - URL for Redis connection
+ * @env REDIS_PORT - Port for Redis connection
+ * @env SERVER_ROLE - Role to be performed by the server (all, worker, api)
+ */
 export const initializeMessageBroker = () => {
-  const redisHost = process.env.REDIS_HOST || 'localhost';
-  const redisPort = parseInt(process.env.REDIS_PORT || '6379');
   const connection = new IORedis({
-    host: redisHost,
-    port: redisPort,
+    host: REDIS_HOST,
+    port: REDIS_PORT,
     maxRetriesPerRequest: null,
   });
-  logger.info(`Connecting to Redis at ${redisHost}:${redisPort}`);
+  logger.info(`Connecting to Redis at ${REDIS_HOST}:${REDIS_PORT}`);
 
   sentimentQueue = new Queue('sentiment', { connection });
   logger.info('Sentiment queue initialized');
@@ -28,6 +38,13 @@ export const initializeMessageBroker = () => {
   }
 };
 
+/**
+ * @description
+ * Analyze sentiment of a new or updated post
+ * 
+ * @param {job} job Job to be processed
+ * @returns 
+ */
 const analyzeSentiment = async (job: Job) => {
   try {
     const { postId } = job.data;

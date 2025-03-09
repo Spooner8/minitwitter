@@ -41,7 +41,7 @@ interface IUser {
     username: string;
 }
 
-const { api } = useApi();
+const api = useApi();
 const postsWithUsernames = ref<(IPost & { username: string })[]>([]);
 const { data: posts } = await api.get<IPost[]>('/api/posts');
 

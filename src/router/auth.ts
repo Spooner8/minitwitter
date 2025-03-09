@@ -1,3 +1,14 @@
+/**
+ * @fileoverview  
+ * This file contains the routes for authentication-related operations.  
+ * It includes routes for login, logout, and checking login status.  
+ * 
+ * Routes:  
+ * - POST /api/auth/login: Authenticates a user with username and password.  
+ * - GET /api/auth/logout: Logs out the current user.  
+ * - GET /api/auth/loginstatus: Checks if the user is currently logged in.
+ */
+
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { authService } from '../services/auth/auth.ts';

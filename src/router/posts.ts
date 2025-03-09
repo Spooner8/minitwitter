@@ -1,3 +1,16 @@
+/**
+ * @fileoverview  
+ * This file contains the routes for posts-related operations.  
+ * It includes routes for creating, updating, and deleting posts.  
+ * 
+ * Routes:  
+ * - GET /api/posts: Retrieves all posts.  
+ * - POST /api/posts: Creates a new post.  
+ * - GET /api/posts/generate: Generates a random post.  
+ * - PUT /api/posts/:id: Updates a post by ID.  
+ * - DELETE /api/posts/:id: Deletes a post by ID.  
+ */
+
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { postService } from '../services/crud/posts.ts';

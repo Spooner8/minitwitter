@@ -1,7 +1,21 @@
+/**
+ * @fileoverview  
+ * This file contains the routes for user-related operations.  
+ * It includes routes for creating, updating, and deleting users.  
+ * 
+ * Routes:  
+ * - POST /api/user/signup: Creates a new user.  
+ * - GET /api/user: Retrieves all users.  
+ * - GET /api/user/:id: Retrieves a user by ID.  
+ * - PUT /api/user/:id: Updates a user by ID.  
+ * - DELETE /api/user/:id: Deletes a user by ID.
+ */
+
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { userService } from '../services/crud/user.ts';
 import { isOwner } from '../middleware/auth.ts';
+import { logger } from '../services/log/logger.ts';
 
 const router = Router();
 
