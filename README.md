@@ -61,17 +61,20 @@ docker compose up -d --build
 ```
 This will take a few minutes to build and start all services for you.
 
-At this point you can switch to your browser and enter 'http://localhost' as url in order to join your own minitwitter.
+***Do not run the stack without build flag, because the published version on docker hub may not be at the same version of your actual code!***
 
+At this point you can switch to your browser and enter 'http://localhost' as url in order to join your own minitwitter.
 
 # For Developers
 ### Backend - First steps
 
-1. **Install dependencies**
+1. **Install Environment**
+    First of all, if you haven't installed Node and Bun on your system, follow the installation guid here:
 
-    ```bash
-    bun install
-    ```
+    - https://nodejs.org/en
+    - https://bun.sh/docs/installation
+
+    After that, restart your IDE to enable the commands in your terminal.
 
 2. **Setup environment variables for running locally (development)**
 
@@ -88,19 +91,46 @@ At this point you can switch to your browser and enter 'http://localhost' as url
     LOG_LEVEL='info' # Optional -> Default = 'info'
     ```
 
-3. **To use the backend in developmend-mode, you need some running services first**
+3. **Install dependencies**
 
-    So we recommend to start the Docker-Stack from the Quick-Start area first. 
+    ```bash
+    bun install
+    ```
+
+4. **To use the backend in developmend-mode, you need some running services first**
+
+    So we recommend to start the Docker-Stack from the Quick-Start area first.
+    If you want to work without running a docker stack you need to prepare the services yourself.
+
+    - PostgreSQL Database (think about the credentials in the .env file)
+    - Redis cache database (or disable it with env-variable: CACHE_ACTIVE=false)
+    - Running Ollama Model 
+        - https://ollama.com/download
+        - https://ollama.com/library/llama3.2:1b
+
     Then you can run the backend with:
     ```bash
     bun dev
     ```
+
+    Apply database models (Database has to be running)
+    ```bash
+    bunx drizzle-kit push
+    ```
+    To check if the database contains the correct tables, just enter
+    ```bash
+    bunx drizzle-kit studio
+    ```
+    in the terminal an go to https://local.drizzle.studio to check or check your PostgreSQL database with *Azure Data Studio* or some tool you prefer.
+
+    You can now reach the backend endpoints with a tool like *Postman* or what ever you prefer for handle http-requests without a frontend.
+
     If you want testing with a frontend, you can now change to the directory /frontend
     ```bash
     cd ./frontend/
     ```
 
-    Again installing the dependencies.
+    Again install the dependencies.
      ```bash
     bun install
     ```
