@@ -1,47 +1,46 @@
 <template>
-  <div>
-    <h1 class="text-2xl font-extrabold mb-4">About Page</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam earum eveniet magni itaque enim nulla blanditiis
-      tenetur est iusto ut non cum, modi animi, perspiciatis maiores incidunt unde rem quisquam corporis. Rem aliquid
-      consequatur sunt? Voluptates quibusdam ullam non dolorum, saepe ad recusandae praesentium fugiat a quos, hic est
-      dolor in. Culpa velit a neque veniam tempore nobis quis totam officiis est architecto nihil sunt distinctio
-      officia excepturi repellat dolore commodi sapiente minus numquam, iste ex aliquam consequuntur. Culpa obcaecati ad
-      at maiores sunt delectus esse recusandae quidem aut tenetur quo sint, debitis molestiae velit nobis veniam quia
-      modi iure soluta! Ut voluptate perferendis est ipsa optio nisi asperiores, soluta iusto? Illum nihil, soluta
-      pariatur explicabo dolore nemo odit expedita quos exercitationem aliquid vel impedit culpa error ipsam at
-      accusamus doloremque ex ducimus vero earum dolor? Aliquam fugiat qui numquam sit reprehenderit expedita culpa?
-      Iure quas exercitationem odio. Iure deserunt laudantium numquam modi. Doloribus veritatis voluptas ex asperiores
-      laboriosam blanditiis mollitia molestiae autem minima nostrum itaque labore explicabo aliquid expedita
-      consequatur, enim quasi laudantium facilis! Expedita sequi tempore sed aliquam quasi qui laborum amet maxime.
-      Officiis eos perspiciatis voluptas voluptates ipsa nesciunt delectus architecto totam eaque culpa, officia veniam
-      provident laboriosam saepe deserunt natus pariatur sed? Ea mollitia similique dignissimos ab hic nam animi et
-      quam, beatae optio fuga corporis id, reiciendis dolore repellendus atque! Nostrum nihil nulla voluptatum labore
-      mollitia delectus, enim ex rem expedita pariatur rerum. Facilis vel sapiente explicabo fugit esse aliquam adipisci
-      commodi sunt suscipit quaerat porro error placeat, earum odit cumque minima, quis eveniet obcaecati iusto
-      aspernatur exercitationem ea? Repellendus quae facere neque pariatur, et iusto fugiat veritatis atque molestias a
-      provident, autem necessitatibus alias repellat consequatur doloribus impedit quidem expedita tempore, dolorem
-      dignissimos rerum corporis. Repellat explicabo sequi aliquam cupiditate illum minus adipisci ad dignissimos
-      delectus, temporibus quasi dicta asperiores dolorum, veritatis natus velit eum, enim nisi nostrum illo doloribus
-      ullam. Similique reiciendis qui corporis, reprehenderit asperiores rem voluptatem, ex excepturi sed placeat ad
-      numquam cupiditate aut esse repudiandae quasi dolores omnis eligendi in voluptates! Cum labore animi asperiores
-      culpa molestias laboriosam minus omnis! Similique id consectetur eaque corporis debitis facilis a temporibus
-      ducimus distinctio itaque, sunt odio ut, libero doloribus fuga totam reprehenderit, nulla aut sed nostrum eveniet
-      eos? Beatae autem ipsa nihil molestias natus asperiores, labore consequuntur nisi? Sed quam veniam quibusdam
-      accusantium? Ut, rerum minus! Officiis ab, iusto assumenda id earum, vitae cumque veritatis obcaecati doloremque
-      ipsum quidem odio amet ullam dignissimos, cupiditate nam voluptatem quaerat soluta! Laboriosam quod, iusto,
-      consequuntur sapiente blanditiis labore hic dignissimos sunt, nulla obcaecati optio? Libero exercitationem fugit
-      impedit, obcaecati magnam eaque, quae placeat incidunt voluptatum suscipit repellat enim. Numquam autem, voluptas
-      cum molestias, odit sed accusamus maiores sapiente laborum nihil, laboriosam fugiat vitae nam a natus ducimus
-      facere quidem quia! Cupiditate adipisci debitis exercitationem, laudantium neque accusantium saepe minima illo
-      vitae ex voluptas. Inventore, ullam non? Unde quia dolorem iusto autem placeat quos blanditiis! Quam harum
-      possimus illum rem, modi architecto quaerat numquam deleniti sint.</p>
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-extrabold mb-6 text-center text-gray-800">Über Minitwitter</h1>
+    
+    <div class="bg-white shadow-lg rounded-xl p-6 space-y-6">
+      <p class="text-lg text-gray-700 leading-relaxed">
+        Minitwitter ist eine minimalistische Social-Media-Plattform, inspiriert von Twitter, die eine schlanke und moderne 
+        Benutzererfahrung bietet. Unser Ziel war es, eine Full-Stack-Anwendung zu entwickeln, die nicht nur performant 
+        und skalierbar ist, sondern auch moderne Technologien und Best Practices nutzt.
+      </p>
+
+      <h2 class="text-2xl font-semibold text-gray-800">🚀 Tech-Stack</h2>
+      <ul class="list-disc list-inside space-y-2 text-gray-700">
+        <li><strong>Backend:</strong> Express.js, PostgreSQL, Redis, Ollama AI, Prometheus & Grafana</li>
+        <li><strong>Frontend:</strong> Nuxt.js, TailwindCSS, Google Fonts, @nuxt/icon</li>
+        <li><strong>DevOps:</strong> Docker, Nginx, K6 Performance-Testing</li>
+      </ul>
+
+      <h2 class="text-2xl font-semibold text-gray-800">🛠 Installation & Nutzung</h2>
+      <p class="text-gray-700">
+        Minitwitter lässt sich schnell aufsetzen. Alles, was du brauchst, ist Node.js, Bun und Docker für die Datenbank- und 
+        Redis-Container. Mehr Details findest du in unserer Dokumentation auf GitHub!
+      </p>
+
+      <h2 class="text-2xl font-semibold text-gray-800">🤝 Das Team</h2>
+      <p class="text-gray-700">
+        Dieses Projekt wurde von <strong>Swen, Lukas und Gianluca</strong> entwickelt. Wir durften dieses Projekt im Rahmen unserer Ausbildung an der HF Teko in Olten entwickeln. Dabei setzten wir auf moderne Webtechnologien und performante Webanwendungen.
+      </p>
+
+      <h2 class="text-2xl font-semibold text-gray-800">📜 Lizenz</h2>
+      <p class="text-gray-700">Minitwitter ist Open Source und steht unter der MIT-Lizenz.</p>
+
+      <p class="text-center">
+        👉 <a href="https://github.com/Spooner8/minitwitter" class="text-blue-600 font-semibold hover:underline">GitHub-Repository</a>
+      </p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
   layout: 'default',
-  title: 'About',
-  description: 'About page'
+  title: 'Über Minitwitter',
+  description: 'Erfahre mehr über das Projekt Minitwitter'
 })
 </script>
