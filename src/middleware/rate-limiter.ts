@@ -1,12 +1,17 @@
 import { rateLimit } from 'express-rate-limit'
 
+/**
+ * @description
+ * Middleware to rate limit requests.
+ * WindowMs is set to 15 minutes and limit is set to 100 requests.
+ * 
+ * @see https://www.npmjs.com/package/express-rate-limit
+ * 
+ * @example app.use(limiter)
+ */
 export const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 minutes
-	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-	standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-	// store: ... , // Redis, Memcached, etc. See below.
+	windowMs: 15 * 60 * 1000,
+	limit: 100,
+	standardHeaders: 'draft-8',
+	legacyHeaders: false,
 })
-
-// Apply the rate limiting middleware to all requests.
-//app.use(limiter)

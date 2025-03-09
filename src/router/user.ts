@@ -1,8 +1,21 @@
+/**
+ * @fileoverview  
+ * This file contains the routes for user-related operations.  
+ * It includes routes for creating, updating, and deleting users.  
+ * 
+ * Routes:  
+ * - POST /api/user/signup: Creates a new user.  
+ * - GET /api/user: Retrieves all users.  
+ * - GET /api/user/:id: Retrieves a user by ID.  
+ * - PUT /api/user/:id: Updates a user by ID.  
+ * - DELETE /api/user/:id: Deletes a user by ID.
+ */
+
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { userService } from '../services/crud/user.ts';
 import { isOwner } from '../middleware/auth.ts';
-import { logger } from '../services/logger';
+import { logger } from '../services/log/logger.ts';
 
 const router = Router();
 
@@ -19,7 +32,7 @@ router.post('/api/user/signup', async (req: Request, res: Response) => {
             res.status(201).send({ 'User created': response });
         }
     } catch (error: any) {
-        logger.info(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -33,7 +46,7 @@ router.get('/api/user', async (_req: Request, res: Response) => {
             res.status(200).send(users);
         }
     } catch (error: any) {
-        logger.info(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -48,7 +61,7 @@ router.get('/api/user/:id', async (req: Request, res: Response) => {
             res.status(200).send(user);
         }
     } catch (error: any) {
-        logger.info(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -67,7 +80,7 @@ router.put('/api/user/:id', isOwner, async (req: Request, res: Response) => {
             res.status(200).send({ 'User updated': response });
         }
     } catch (error: any) {
-        logger.info(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -82,7 +95,7 @@ router.delete('/api/user/:id', isOwner, async (req: Request, res: Response) => {
             res.status(200).send({ 'User deleted': response });
         }
     } catch (error: any) {
-        logger.info(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });

@@ -1,3 +1,16 @@
+/**
+ * @fileoverview  
+ * This file contains the routes for posts-related operations.  
+ * It includes routes for creating, updating, and deleting posts.  
+ * 
+ * Routes:  
+ * - GET /api/posts: Retrieves all posts.  
+ * - POST /api/posts: Creates a new post.  
+ * - GET /api/posts/generate: Generates a random post.  
+ * - PUT /api/posts/:id: Updates a post by ID.  
+ * - DELETE /api/posts/:id: Deletes a post by ID.  
+ */
+
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { postService } from '../services/crud/posts.ts';
@@ -5,18 +18,13 @@ import { isUser, isOwner } from '../middleware/auth.ts';
 import { authService } from '../services/auth/auth.ts';
 import { sentimentQueue } from '../message-broker/index.ts';
 import { getPosts, invalidatePostsCache } from '../services/cache/cache.ts';
-import { limiter } from '../middleware/rate-limiter.ts';
-import { logger } from '../services/logger.ts';
+import { logger } from '../services/log/logger.ts';
 
 const router = Router();
 
-router.use(limiter);
-
-
-router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
-//router.get('/api/posts', async (_req: Request, res: Response) => {
+router.get('/api/posts', async (_req: Request, res: Response) => {
+    // router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
     try {
-        // const posts = await postService.getPosts();
         const posts = await getPosts();
         if (!posts) {
             res.status(404).send({ message: 'Posts not found' });
@@ -24,7 +32,7 @@ router.get('/api/posts', isUser, async (_req: Request, res: Response) => {
             res.status(200).send(posts);
         }
     } catch (error: any) {
-        logger.info(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -51,7 +59,7 @@ router.post('/api/posts', isUser, async (req: Request, res: Response) => {
         }
         await invalidatePostsCache();
     } catch (error: any) {
-        logger.info(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -69,7 +77,7 @@ router.get(
                 res.status(201).send({ content: response });
             }
         } catch (error: any) {
-            logger.info(error);
+            logger.error(error);
             res.status(400).send({ message: error.message });
         }
     }
@@ -94,7 +102,7 @@ router.put('/api/posts/:id', isOwner, async (req: Request, res: Response) => {
         }
         await invalidatePostsCache();
     } catch (error: any) {
-        logger.info(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -113,7 +121,7 @@ router.delete(
             }
             await invalidatePostsCache();
         } catch (error: any) {
-            logger.info(error);
+            logger.error(error);
             res.status(400).send({ message: error.message });
         }
     }

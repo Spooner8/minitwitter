@@ -1,4 +1,5 @@
 name: minitwitter
+
 services:
     loadbalancer:
         image: nginx
@@ -10,15 +11,33 @@ services:
         restart: always
         networks:
             - minitwitter
+
+    prometheus:
+        image: prom/prometheus
+        container_name: prometheus
+        volumes:
+            - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+        ports:
+            - '9090:9090'
+        restart: always
+        networks:
+            - minitwitter
+
+    grafana:
+        image: grafana/grafana
+        container_name: grafana
+        ports:
+            - '3100:3000'
+        restart: always
+        networks:
+            - minitwitter
     db:
         container_name: db
         image: postgres
         ports:
             - '5432:5432'
-        environment:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: supersecret123
-            POSTGRES_DB: minitwitter
+        env_file:
+            - db.env
         volumes:
             - minitwitter-db:/var/lib/postgresql/data
         networks:
@@ -31,13 +50,8 @@ services:
             dockerfile: Dockerfile
         container_name: api-1
         image: spoonersl/minitwitter
-        environment:
-            DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
-            OLLAMA_BASE_URL: http://ollama-1:11434
-            REDIS_HOST: redis
-            SERVER_ROLE: api
-            CACHE_ACTIVE: "true"
-            LOG_LEVEL: info
+        env_file:
+            - api.env
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
@@ -51,13 +65,8 @@ services:
             dockerfile: Dockerfile
         container_name: api-2
         image: spoonersl/minitwitter
-        environment:
-            DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
-            OLLAMA_BASE_URL: http://ollama-1:11434
-            REDIS_HOST: redis
-            SERVER_ROLE: api
-            CACHE_ACTIVE: "true"
-            LOG_LEVEL: info
+        env_file:
+            - api.env
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
@@ -71,13 +80,9 @@ services:
             dockerfile: Dockerfile
         container_name: minitwitter-worker
         image: spoonersl/minitwitter
-        environment:
-            DATABASE_URL: postgressql://postgres:supersecret123@db:5432/minitwitter
-            OLLAMA_BASE_URL: http://ollama-1:11434
-            REDIS_HOST: redis
-            SERVER_ROLE: worker
-            CACHE_ACTIVE: "true"
-            LOG_LEVEL: info
+        env_file:
+            - path: api.env
+            - path: worker.env
         depends_on:
             - db
         command: /bin/sh -c "bunx drizzle-kit push && bun run prod"
@@ -91,8 +96,8 @@ services:
             dockerfile: Dockerfile
         container_name: app-1
         image: spoonersl/minitwitter-app
-        environment:
-            NUXT_PUBLIC_API_BASE_URL: http://localhost:80
+        env_file:
+            - app.env
         networks:
             - minitwitter
         restart: always
