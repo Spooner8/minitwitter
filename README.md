@@ -18,6 +18,13 @@ What you get:
 ## Quick start
 
 Before you run the Container-Stack, you have to set the environment variables.
+Add the files described below or rename existing example files (same content) and just remove the ***.example*** at the end.
+
+Files in the repository:
+- api.env.example
+- db.env.example
+- app.env.example
+- worker.env.example
 
 ## Recommended way
 ### db.env
@@ -78,7 +85,7 @@ At this point you can switch to your browser and enter 'http://localhost' as url
 
 2. **Setup environment variables for running locally (development)**
 
-    Create a file in the root directory named **.env**
+    Create a file in the root directory named **.env** or rename existing file .env.example
 
     You need to set the following variables in it:
 
