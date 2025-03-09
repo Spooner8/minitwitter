@@ -1,10 +1,17 @@
-export function useCurrentUser() {
-    interface IUser {
-        id: number;
-        username: string;
-    }
+/**
+ * @description
+ * This composable is responsible for getting the current user from the server.
+ * 
+ * @returns {Object} an object with a referance to the current user and a function to get the current user.
+ */
+interface IUser {
+    id: number;
+    username: string;
+}
 
-    const { api } = useApi();
+export function useCurrentUser(): { currentUser: Ref<IUser | null>, getCurrentUser: () => Promise<void> } {
+
+    const api = useApi();
     const currentUser: Ref<IUser | null> = ref(null);
 
     const getCurrentUser = async () => {

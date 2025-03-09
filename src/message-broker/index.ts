@@ -2,37 +2,52 @@ import { Job, Queue, Worker } from 'bullmq';
 import IORedis from 'ioredis';
 import { postService } from '../services/crud/posts';
 import { textAnalysis } from '../services/ai/ai';
+import { logger } from '../services/log/logger';
 
 let sentimentQueue: Queue;
 let sentimentWorker: Worker;
 
 // Determine the server role from environment variables
 const SERVER_ROLE = process.env.SERVER_ROLE || 'all';
+const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
+const REDIS_PORT = parseInt(process.env.REDIS_PORT || '6379');
 
-// Function to initialize the message broker
+/**
+ * @description
+ * Initialize message broker with Redis connection.  
+ * If the server role is 'all' or 'worker', a worker is created to process sentiment analysis jobs.
+ * 
+ * Environment variables:
+ * @env REDIS_HOST - URL for Redis connection
+ * @env REDIS_PORT - Port for Redis connection
+ * @env SERVER_ROLE - Role to be performed by the server (all, worker, api)
+ */
 export const initializeMessageBroker = () => {
-  // Get Redis connection details from environment variables
-  const redisHost = process.env.REDIS_HOST || 'localhost';
-  const redisPort = parseInt(process.env.REDIS_PORT || '6379');
   const connection = new IORedis({
-    host: redisHost,
-    port: redisPort,
+    host: REDIS_HOST,
+    port: REDIS_PORT,
     maxRetriesPerRequest: null,
   });
-  console.log(`Connecting to Redis at ${redisHost}:${redisPort}`);
+  logger.info(`Connecting to Redis at ${REDIS_HOST}:${REDIS_PORT}`);
 
   // Initialize the sentiment queue
   sentimentQueue = new Queue('sentiment', { connection });
-  console.log('Sentiment queue initialized');
+  logger.info('Sentiment queue initialized');
 
   // Initialize the sentiment worker if the server role is 'all' or 'worker'
   if (SERVER_ROLE === 'all' || SERVER_ROLE === 'worker') {
     sentimentWorker = new Worker('sentiment', analyzeSentiment, { connection });
-    console.log('Message worker initialized');
+    logger.info('Message worker initialized');
   }
 };
 
-// Function to analyze sentiment of a post
+/**
+ * @description
+ * Analyze sentiment of a new or updated post
+ * 
+ * @param {job} job Job to be processed
+ * @returns 
+ */
 const analyzeSentiment = async (job: Job) => {
   try {
     // Get the post ID from the job data
@@ -41,7 +56,7 @@ const analyzeSentiment = async (job: Job) => {
     // Fetch the post by ID
     const post = await postService.getPostById(postId);
     if (!post) {
-      console.error(`Post with ID ${postId} not found`);
+      logger.error(`Post with ID ${postId} not found`);
       return;
     }
 
@@ -55,7 +70,7 @@ const analyzeSentiment = async (job: Job) => {
     });
 
   } catch (error) {
-    console.error('Error while analyzing sentiment:', error);
+    logger.error('Error while analyzing sentiment:', error);
   }
 };
 

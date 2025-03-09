@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 
-const { api } = useApi();
+const api = useApi();
 const content = ref('');
 const emit = defineEmits(['close', 'postCreated']);
 

@@ -1,6 +1,18 @@
+/**
+ * @fileoverview  
+ * This file contains the routes for authentication-related operations.  
+ * It includes routes for login, logout, and checking login status.  
+ * 
+ * Routes:  
+ * - POST /api/auth/login: Authenticates a user with username and password.  
+ * - GET /api/auth/logout: Logs out the current user.  
+ * - GET /api/auth/loginstatus: Checks if the user is currently logged in.
+ */
+
 import type { Request, Response } from 'express';
 import { Router } from 'express';
 import { authService } from '../services/auth/auth.ts';
+import { logger } from '../services/log/logger.ts';
 
 const router = Router();
 
@@ -20,8 +32,7 @@ router.post('/api/auth/login', async (req: Request, res: Response) => {
             res.status(200).send(response);
         }
     } catch (error: any) {
-        // Handle any errors and respond with 400 Bad Request
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -31,8 +42,7 @@ router.get('/api/auth/logout', (_req: Request, res: Response) => {
     try {
         authService.logout(res);
     } catch (error: any) {
-        // Handle any errors and respond with 400 Bad Request
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
@@ -49,8 +59,7 @@ router.get('/api/auth/loginstatus', async (req: Request, res: Response) => {
             res.status(200).json({ isLoggedIn: false });
         }
     } catch (error: any) {
-        // Handle any errors and respond with 400 Bad Request
-        console.log(error);
+        logger.error(error);
         res.status(400).send({ message: error.message });
     }
 });
