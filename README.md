@@ -61,6 +61,7 @@ NUXT_PUBLIC_API_BASE_URL='http://localhost:80'
 ## Optional way
 You can set the variables directly in the **docker-compose.yml** - File. If you prefere this way, set the variables mentioned above into the services with the same name as the filenames above.
 
+## First Startup
 If your docker daemon isn't allready running, start it.
 Now you can run your container-stack. Enter the following command in your terminal on root directory.
 ```bash
@@ -70,12 +71,31 @@ This will take a few minutes to build and start all services for you.
 
 ***Do not run the stack without build flag, because the published version on docker hub may not be at the same version of your actual code!***
 
+### Init the database tables
+For the first time you run up the Stack, you have to go into one of the **api**-Container terminals an run
+```bash
+bunx drizzle-kit push
+```
+You can exec the terminal via ***Docker Desktop*** or just run 
+```bash
+docker exec -it api-1 sh
+```
+in a terminal in your IDE to join the container shell.
+
+After initializing the Tables, leave the shell with
+```bash
+exit
+```
+
+## Use the App
+
 At this point you can switch to your browser and enter 'http://localhost' as url in order to join your own minitwitter.
 
 # For Developers
 ### Backend - First steps
 
 1. **Install Environment**
+
     First of all, if you haven't installed Node and Bun on your system, follow the installation guid here:
 
     - https://nodejs.org/en
