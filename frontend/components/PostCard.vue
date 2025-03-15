@@ -104,7 +104,7 @@ const props = defineProps<{
     post: IExtendedPost;
 }>();
 
-const { api } = useApi();
+const api = useApi();
 const { username, userId, id, correction } = props.post;
 let { content } = props.post;
 const { currentUser, getCurrentUser } = useCurrentUser();
