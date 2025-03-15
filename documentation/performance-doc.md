@@ -123,7 +123,7 @@ k6 run .\src\performance\stress-test.ts
 
 ![load-cached](./k6/gl-load-nocache.png)
 
-## lomatron98
+## lombatron98
 
 **System**
 ![lb-system](./system/gl.png)
