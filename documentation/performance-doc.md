@@ -61,7 +61,7 @@ scenarios: {
 k6 run .\src\performance\stress-test.ts
 ```
 
-![load-cached](./k6/sl-load-nocache.png)
+![load-cached](./k6/sl-stress.png)
 
 ## SyntaxWizzardBB
 
@@ -121,12 +121,12 @@ scenarios: {
 k6 run .\src\performance\stress-test.ts
 ```
 
-![load-cached](./k6/gl-load-nocache.png)
+![load-cached](./k6/lb-stress.png)
 
 ## lombatron98
 
 **System**
-![lb-system](./system/gl.png)
+![gl-system](./system/gl.png)
 
 **pgbench**
 
@@ -181,4 +181,4 @@ scenarios: {
 k6 run .\src\performance\stress-test.ts
 ```
 
-![load-cached](./k6/gl-load-nocache.png)
+![load-cached](./k6/gl-stress.png)
