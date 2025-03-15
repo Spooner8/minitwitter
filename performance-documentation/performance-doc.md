@@ -6,6 +6,7 @@ Therefore we show some screens of every member in this small study team.
 ## Spooner8
 
 **System**
+
 ![sl-system](./system/sl.png)
 
 **pgbench**
@@ -66,6 +67,7 @@ k6 run .\src\performance\stress-test.ts
 ## SyntaxWizzardBB
 
 **System**
+
 ![lb-system](./system/lb.png)
 
 **pgbench**
@@ -126,6 +128,7 @@ k6 run .\src\performance\stress-test.ts
 ## lombatron98
 
 **System**
+
 ![gl-system](./system/gl.png)
 
 **pgbench**
