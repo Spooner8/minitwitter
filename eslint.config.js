@@ -7,8 +7,7 @@ import { globalIgnores } from "eslint/config";
 export default [
   globalIgnores(
     [
-      "**/*.d.ts",
-      "**/*.{cjs,mjs}",
+      "*/.nuxt/**/*.{js,ts,mjs,cjs,vue}",
     ]
   ),
   {
@@ -32,7 +31,6 @@ export default [
     files: ["**/*.{js,ts,vue}"],
     rules: {
       '@typescript-eslint/no-unused-expressions': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
     },
   },
