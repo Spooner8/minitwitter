@@ -28,32 +28,44 @@ router.post('/api/auth/login', async (req: Request, res: Response) => {
         } else {
             res.status(200).send(response);
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
 router.get('/api/auth/logout', (_req: Request, res: Response) => {
     try {
         authService.logout(res);
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
 router.get('/api/auth/loginstatus', async (req: Request, res: Response) => {
     try {
-        const user = await authService.getCurrentUser(req, res);
+        const user = await authService.getCurrentUser(req);
     if (user) {
         res.status(200).json({ isLoggedIn: true, user });
     } else {
         res.status(200).json({ isLoggedIn: false });
     }
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 

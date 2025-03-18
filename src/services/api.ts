@@ -35,7 +35,9 @@ export const initializeAPI = (app: Express) => {
     app.use(cookieParser());
     app.use(cors(corsOptions));
 
-    LIMITER && app.use(limiter);
+    if (LIMITER) {
+        app.use(limiter);
+    }
     app.use(httpLogger);
 
     // Router

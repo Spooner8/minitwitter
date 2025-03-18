@@ -31,9 +31,13 @@ router.post('/api/user/signup', async (req: Request, res: Response) => {
         } else {
             res.status(201).send({ 'User created': response });
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -45,9 +49,13 @@ router.get('/api/user', async (_req: Request, res: Response) => {
         } else {
             res.status(200).send(users);
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -60,9 +68,13 @@ router.get('/api/user/:id', async (req: Request, res: Response) => {
         } else {
             res.status(200).send(user);
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -79,9 +91,13 @@ router.put('/api/user/:id', isOwner, async (req: Request, res: Response) => {
         } else {
             res.status(200).send({ 'User updated': response });
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -94,9 +110,13 @@ router.delete('/api/user/:id', isOwner, async (req: Request, res: Response) => {
         } else {
             res.status(200).send({ 'User deleted': response });
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 

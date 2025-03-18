@@ -4,8 +4,9 @@ import { postService } from '../services/crud/posts';
 import { textAnalysis } from '../services/ai/ai';
 import { logger } from '../services/log/logger';
 
-let sentimentQueue: Queue;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let sentimentWorker: Worker;
+let sentimentQueue: Queue;
 
 const SERVER_ROLE = process.env.SERVER_ROLE || 'all';
 const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
