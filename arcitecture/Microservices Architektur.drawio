@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0" version="26.1.1">
   <diagram name="Seite-1" id="1LR6hy9Yagn1V_z_DEYL">
-    <mxGraphModel dx="3691" dy="2308" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2842" dy="1833" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -61,8 +61,8 @@
         <mxCell id="tbwMI4v-mFkp3XjZrlkX-40" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=12;startSize=8;endSize=8;" parent="1" source="x58m1gPnZD0ombqf3Mhe-22" target="x58m1gPnZD0ombqf3Mhe-23" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tbwMI4v-mFkp3XjZrlkX-71" value="Text" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="tbwMI4v-mFkp3XjZrlkX-40" vertex="1" connectable="0">
-          <mxGeometry x="-0.031" y="-2" relative="1" as="geometry">
+        <mxCell id="WWWUozUZeTl1Iqde8gUQ-3" value="TCP/IP" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" vertex="1" connectable="0" parent="tbwMI4v-mFkp3XjZrlkX-40">
+          <mxGeometry x="-0.2566" y="-1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
@@ -111,9 +111,9 @@
         <mxCell id="tbwMI4v-mFkp3XjZrlkX-44" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontSize=12;startSize=8;endSize=8;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="x58m1gPnZD0ombqf3Mhe-26" target="x58m1gPnZD0ombqf3Mhe-25" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tbwMI4v-mFkp3XjZrlkX-64" value="TCP" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="tbwMI4v-mFkp3XjZrlkX-44" vertex="1" connectable="0">
+        <mxCell id="tbwMI4v-mFkp3XjZrlkX-64" value="TCP/IP" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="tbwMI4v-mFkp3XjZrlkX-44" vertex="1" connectable="0">
           <mxGeometry x="-0.0514" y="5" relative="1" as="geometry">
-            <mxPoint y="-6" as="offset" />
+            <mxPoint x="3" y="-6" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="x58m1gPnZD0ombqf3Mhe-26" value="BullMQ&lt;div&gt;Worker&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6d8764;fontColor=#ffffff;strokeColor=#3A5431;" parent="1" vertex="1">
@@ -180,7 +180,7 @@
             <mxPoint x="-490" y="400" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="tbwMI4v-mFkp3XjZrlkX-63" value="TCP" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="tbwMI4v-mFkp3XjZrlkX-33" vertex="1" connectable="0">
+        <mxCell id="tbwMI4v-mFkp3XjZrlkX-63" value="TCP/IP" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="tbwMI4v-mFkp3XjZrlkX-33" vertex="1" connectable="0">
           <mxGeometry x="-0.0647" y="1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -191,7 +191,7 @@
             <mxPoint x="-490" y="400" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="tbwMI4v-mFkp3XjZrlkX-61" value="TCP" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="tbwMI4v-mFkp3XjZrlkX-34" vertex="1" connectable="0">
+        <mxCell id="tbwMI4v-mFkp3XjZrlkX-61" value="TCP/IP" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="tbwMI4v-mFkp3XjZrlkX-34" vertex="1" connectable="0">
           <mxGeometry x="0.0691" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
