@@ -15,14 +15,18 @@ export const isUser = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const user = await authService.getCurrentUser(req, res);
+        const user = await authService.getCurrentUser(req);
         if (!user) {
             res.status(401).json({ message: 'Unauthorized' });
         } else {
             next();
         }
-    } catch (error: any) {
-        res.status(400).json({ message: error.message });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 };
 
@@ -39,7 +43,7 @@ export const isOwner = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const user = await authService.getCurrentUser(req, res);
+        const user = await authService.getCurrentUser(req);
         const postId = parseInt(req.params.id);
 
         const post = await postService.getPostById(postId);
@@ -48,7 +52,11 @@ export const isOwner = async (
         } else {
             next();
         }
-    } catch (error: any) {
-        res.status(400).json({ message: error.message });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 };

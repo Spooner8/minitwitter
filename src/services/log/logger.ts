@@ -21,7 +21,7 @@ const logger = pino({
  */
 const httpLogger = pinoHttp({
   logger: logger,
-  customProps: (req: Request, res) => {
+  customProps: (req: Request) => {
     return {
       userId: req.user?.id,
       username: req.user?.username,

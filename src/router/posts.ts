@@ -31,16 +31,20 @@ router.get('/api/posts', async (_req: Request, res: Response) => {
         } else {
             res.status(200).send(posts);
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
 router.post('/api/posts', isUser, async (req: Request, res: Response) => {
     try {
         const { content } = req.body;
-        const user = await authService.getCurrentUser(req, res);
+        const user = await authService.getCurrentUser(req);
         if (!user) {
             res.status(401).send({ message: 'Unauthorized' });
         }
@@ -58,9 +62,13 @@ router.post('/api/posts', isUser, async (req: Request, res: Response) => {
             res.status(201).send(response);
         }
         await invalidatePostsCache();
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -76,9 +84,13 @@ router.get(
             } else {
                 res.status(201).send({ content: response });
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             logger.error(error);
-            res.status(400).send({ message: error.message });
+            if (error instanceof Error) {
+                res.status(400).json({ message: error.message });
+            } else {
+                res.status(400).json({ message: 'An unknown error occurred' });
+            }
         }
     }
 );
@@ -101,9 +113,13 @@ router.put('/api/posts/:id', isOwner, async (req: Request, res: Response) => {
             });
         }
         await invalidatePostsCache();
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
-        res.status(400).send({ message: error.message });
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        } else {
+            res.status(400).json({ message: 'An unknown error occurred' });
+        }
     }
 });
 
@@ -120,9 +136,13 @@ router.delete(
                 res.status(200).send({ 'Post deleted': response });
             }
             await invalidatePostsCache();
-        } catch (error: any) {
+        } catch (error: unknown) {
             logger.error(error);
-            res.status(400).send({ message: error.message });
+            if (error instanceof Error) {
+                res.status(400).json({ message: error.message });
+            } else {
+                res.status(400).json({ message: 'An unknown error occurred' });
+            }
         }
     }
 );

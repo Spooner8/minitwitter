@@ -13,6 +13,7 @@ interface UserPayload {
 }
 
 declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace Express {
         interface Request {
             user?: UserPayload;
@@ -96,7 +97,6 @@ function createJwtToken(user: UserPayload) {
  */
 async function getCurrentUser(
     req: Request,
-    res: Response
 ): Promise<UserPayload | null> {
     try {
         const token = req.cookies?.jwt;
@@ -112,7 +112,7 @@ async function getCurrentUser(
         } else {
             return null;
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error(error);
         return null;
     }
